@@ -1,0 +1,374 @@
+import * as React from "react";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { ageGroups, programs, getProgramById, type AgeGroupId } from "@/data/programs";
+import { MessageCircle, ArrowRight, Phone, Mail, User, Heart, Info } from "lucide-react";
+import { Blob } from "@/components/brand";
+
+interface RegisterSearch {
+  program?: string;
+}
+
+export const Route = createFileRoute("/register")({
+  head: () => ({
+    meta: [
+      { title: "Register Your Child · The Hack House" },
+      {
+        name: "description",
+        content: "Quick and easy registration for Hack House workshops and summer camps. Takes under 2 minutes.",
+      },
+      { property: "og:title", content: "Register Your Child · The Hack House" },
+      { property: "og:description", content: "Grab your spot before it fills up!" },
+    ],
+  }),
+  validateSearch: (search): RegisterSearch => ({
+    program: typeof search.program === "string" ? search.program : undefined,
+  }),
+  component: RegisterPage,
+});
+
+interface FormState {
+  childName: string;
+  childAge: string;
+  medical: string;
+  parentName: string;
+  email: string;
+  whatsapp: string;
+  type: "workshop" | "camp";
+  ageGroup: AgeGroupId | "";
+  programId: string;
+  source: string;
+  notes: string;
+}
+
+function RegisterPage() {
+  const { program: programParam } = Route.useSearch();
+  const navigate = useNavigate();
+
+  const preselected = programParam ? getProgramById(programParam) : undefined;
+
+  const [form, setForm] = React.useState<FormState>({
+    childName: "",
+    childAge: "",
+    medical: "",
+    parentName: "",
+    email: "",
+    whatsapp: "",
+    type: preselected?.type ?? "workshop",
+    ageGroup: preselected?.ageGroup ?? "",
+    programId: preselected?.id ?? "",
+    source: "",
+    notes: "",
+  });
+  const [errors, setErrors] = React.useState<Partial<Record<keyof FormState, string>>>({});
+
+  const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
+    setForm((f) => ({ ...f, [k]: v }));
+    setErrors((e) => ({ ...e, [k]: undefined }));
+  };
+
+  const availablePrograms = programs.filter(
+    (p) => p.type === form.type && (form.ageGroup === "" || p.ageGroup === form.ageGroup),
+  );
+
+  const validate = () => {
+    const e: typeof errors = {};
+    if (!form.childName.trim()) e.childName = "Please enter your child's name";
+    if (!form.childAge.trim()) e.childAge = "Please enter your child's age";
+    if (!form.parentName.trim()) e.parentName = "Please enter your name";
+    if (!form.email.trim()) e.email = "Please enter your email";
+    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "That doesn't look like a valid email";
+    if (!form.whatsapp.trim()) e.whatsapp = "We'll need a WhatsApp number to send instructions";
+    if (!form.programId) e.programId = "Please pick a program";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const onSubmit = (ev: React.FormEvent) => {
+    ev.preventDefault();
+    if (!validate()) {
+      const firstErr = document.querySelector("[data-error=true]");
+      firstErr?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    const program = getProgramById(form.programId);
+    navigate({
+      to: "/register/success",
+      search: {
+        child: form.childName,
+        program: program?.title ?? "",
+        dates: program?.dates ?? "",
+        whatsapp: form.whatsapp,
+      },
+    });
+  };
+
+  return (
+    <>
+      <section className="relative overflow-hidden bg-gradient-to-br from-brand-orange/90 via-primary to-brand-teal py-16 text-white md:py-20">
+        <div className="absolute inset-0 bg-confetti-dark opacity-50" />
+        <Blob className="-left-24 top-0 h-80 w-80" color="white" opacity={0.15} />
+        <div className="relative mx-auto max-w-3xl px-6 text-center md:px-8">
+          <h1 className="font-display text-4xl font-black md:text-5xl">
+            Register Your Child <span className="inline-block animate-bounce-soft">📝</span>
+          </h1>
+          <p className="mt-3 text-lg text-white/90">Grab your spot before it fills up!</p>
+        </div>
+      </section>
+
+      <section className="bg-background py-12 md:py-16">
+        <div className="mx-auto max-w-2xl px-6 md:px-8">
+          {preselected && (
+            <div className="mb-8 flex items-start gap-3 rounded-2xl border-2 border-primary/30 bg-primary/10 p-4">
+              <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <div className="text-sm text-brand-teal">
+                <span className="font-display font-extrabold">Registering for: </span>
+                {preselected.title} · {preselected.ageLabel} · {preselected.dates}
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={onSubmit} className="space-y-10">
+            <Section label="About Your Child" icon={<User className="h-4 w-4" />}>
+              <Field
+                label="Child's Full Name"
+                required
+                error={errors.childName}
+              >
+                <input
+                  value={form.childName}
+                  onChange={(e) => set("childName", e.target.value)}
+                  data-error={!!errors.childName}
+                  placeholder="e.g. Lily Chen"
+                  className={inputCls(!!errors.childName)}
+                />
+              </Field>
+              <Field label="Child's Age" required error={errors.childAge}>
+                <input
+                  type="number"
+                  min={4}
+                  max={18}
+                  value={form.childAge}
+                  onChange={(e) => set("childAge", e.target.value)}
+                  data-error={!!errors.childAge}
+                  placeholder="e.g. 8"
+                  className={inputCls(!!errors.childAge)}
+                />
+              </Field>
+              <Field
+                label="Medical Conditions / Special Needs"
+                helper="This helps us provide the best care. Optional."
+              >
+                <textarea
+                  rows={3}
+                  value={form.medical}
+                  onChange={(e) => set("medical", e.target.value)}
+                  placeholder="Allergies, dietary needs, anything we should know..."
+                  className={inputCls(false)}
+                />
+              </Field>
+            </Section>
+
+            <Section label="Parent or Guardian" icon={<Heart className="h-4 w-4" />}>
+              <Field label="Parent Full Name" required error={errors.parentName}>
+                <input
+                  value={form.parentName}
+                  onChange={(e) => set("parentName", e.target.value)}
+                  data-error={!!errors.parentName}
+                  placeholder="e.g. Sarah Chen"
+                  className={inputCls(!!errors.parentName)}
+                />
+              </Field>
+              <Field label="Email Address" required error={errors.email}>
+                <div className="relative">
+                  <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-soft" />
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => set("email", e.target.value)}
+                    data-error={!!errors.email}
+                    placeholder="you@example.com"
+                    className={inputCls(!!errors.email, "pl-11")}
+                  />
+                </div>
+              </Field>
+              <Field
+                label="WhatsApp Number"
+                required
+                error={errors.whatsapp}
+                helper="We'll send payment instructions here."
+              >
+                <div className="relative">
+                  <MessageCircle className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#25D366]" />
+                  <input
+                    type="tel"
+                    value={form.whatsapp}
+                    onChange={(e) => set("whatsapp", e.target.value)}
+                    data-error={!!errors.whatsapp}
+                    placeholder="+1 (555) 555-5555"
+                    className={inputCls(!!errors.whatsapp, "pl-11")}
+                  />
+                </div>
+              </Field>
+            </Section>
+
+            <Section label="Program Details" icon={<Phone className="h-4 w-4" />}>
+              <Field label="Program type">
+                <div className="grid grid-cols-2 gap-2 rounded-2xl bg-brand-mint p-1.5">
+                  {(["workshop", "camp"] as const).map((t) => (
+                    <button
+                      type="button"
+                      key={t}
+                      onClick={() => set("type", t)}
+                      className={`rounded-xl px-4 py-2.5 font-display text-sm font-extrabold transition-all ${
+                        form.type === t ? "bg-white text-brand-teal shadow-soft" : "text-text-soft"
+                      }`}
+                    >
+                      {t === "workshop" ? "Workshop" : "Summer Camp"}
+                    </button>
+                  ))}
+                </div>
+              </Field>
+              <Field label="Age Group">
+                <select
+                  value={form.ageGroup}
+                  onChange={(e) => {
+                    const v = e.target.value as AgeGroupId | "";
+                    set("ageGroup", v);
+                    set("programId", "");
+                  }}
+                  className={inputCls(false)}
+                >
+                  <option value="">Any age group</option>
+                  {Object.values(ageGroups).map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.range} · {form.type === "camp" ? g.campName : g.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Program" required error={errors.programId}>
+                <select
+                  value={form.programId}
+                  onChange={(e) => set("programId", e.target.value)}
+                  data-error={!!errors.programId}
+                  className={inputCls(!!errors.programId)}
+                >
+                  <option value="">Select a program</option>
+                  {availablePrograms.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.title} · {p.ageLabel} · {p.price}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </Section>
+
+            <Section label="Anything Else?" icon={<Info className="h-4 w-4" />}>
+              <Field label="How did you hear about us?">
+                <select
+                  value={form.source}
+                  onChange={(e) => set("source", e.target.value)}
+                  className={inputCls(false)}
+                >
+                  <option value="">Select an option</option>
+                  <option>A friend or family member</option>
+                  <option>Instagram</option>
+                  <option>Facebook</option>
+                  <option>Google search</option>
+                  <option>School newsletter</option>
+                  <option>Other</option>
+                </select>
+              </Field>
+              <Field label="Additional notes">
+                <textarea
+                  rows={3}
+                  value={form.notes}
+                  onChange={(e) => set("notes", e.target.value)}
+                  placeholder="Anything else you'd like us to know?"
+                  className={inputCls(false)}
+                />
+              </Field>
+            </Section>
+
+            <button
+              type="submit"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-4 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.01]"
+            >
+              Submit Registration <ArrowRight className="h-5 w-5" />
+            </button>
+            <p className="flex items-center justify-center gap-2 text-center text-xs text-text-soft">
+              <MessageCircle className="h-4 w-4 text-[#25D366]" />
+              After submitting, we'll send payment instructions to your WhatsApp number.
+            </p>
+
+            <p className="text-center text-xs text-text-soft">
+              Prefer to chat first?{" "}
+              <Link to="/" className="font-bold text-primary hover:underline">
+                Back to home
+              </Link>
+            </p>
+          </form>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function Section({
+  label,
+  icon,
+  children,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-3xl bg-white p-6 shadow-soft md:p-8">
+      <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 font-display text-xs font-extrabold uppercase tracking-wider text-primary">
+        {icon}
+        {label}
+      </div>
+      <div className="space-y-5">{children}</div>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  required,
+  error,
+  helper,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  error?: string;
+  helper?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="block font-display text-sm font-extrabold text-brand-teal">
+        {label}
+        {required && <span className="ml-1 text-brand-orange">*</span>}
+      </span>
+      <div className="mt-1.5">{children}</div>
+      {error ? (
+        <span className="mt-1.5 block text-xs font-semibold text-destructive">{error}</span>
+      ) : helper ? (
+        <span className="mt-1.5 block text-xs text-text-soft">{helper}</span>
+      ) : null}
+    </label>
+  );
+}
+
+function inputCls(error: boolean, extra = "") {
+  return [
+    "w-full rounded-2xl border-2 bg-background px-4 py-3 text-base text-brand-teal transition-all placeholder:text-text-soft/70 focus:outline-none",
+    error ? "border-destructive focus:ring-4 focus:ring-destructive/20" : "border-brand-mint focus:border-primary focus:ring-4 focus:ring-primary/20",
+    extra,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
