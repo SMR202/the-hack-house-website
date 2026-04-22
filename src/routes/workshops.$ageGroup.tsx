@@ -26,8 +26,9 @@ export const Route = createFileRoute("/workshops/$ageGroup")({
       ],
     };
   },
-  beforeLoad: ({ params }) => {
+  loader: ({ params }) => {
     if (!ageGroups[params.ageGroup as AgeGroupId]) throw notFound();
+    return {};
   },
   notFoundComponent: () => (
     <div className="mx-auto max-w-xl px-6 py-24 text-center">

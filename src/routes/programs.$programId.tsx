@@ -25,8 +25,9 @@ export const Route = createFileRoute("/programs/$programId")({
       ],
     };
   },
-  beforeLoad: ({ params }) => {
+  loader: ({ params }) => {
     if (!getProgramById(params.programId)) throw notFound();
+    return {};
   },
   notFoundComponent: () => (
     <div className="mx-auto max-w-xl px-6 py-24 text-center">
