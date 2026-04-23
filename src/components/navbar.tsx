@@ -5,19 +5,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Sparkles, Palette, ChefHat, FlaskConical, Trophy, Drama, Music } from "lucide-react";
 import { HouseLogo } from "./brand";
-import { ageGroups } from "@/data/programs";
+
+const ageGroupsData = {
+  "ages-6-9": { name: "Little Explorers", range: "Ages 6–9", tagline: "Big imaginations, endless fun", campName: "Mini Adventurers", campRange: "Ages 5–8" },
+  "ages-10-13": { name: "Young Makers", range: "Ages 10–13", tagline: "Building real skills, real confidence", campName: "Trailblazers", campRange: "Ages 9–12" },
+  "ages-14-plus": { name: "Teen Creators", range: "Ages 14+", tagline: "Level up with expert-led projects", campName: "Pathfinders", campRange: "Ages 13–15" },
+} as const;
 
 const workshopAgeLinks = [
-  { id: "ages-6-9", icon: Palette, color: "text-primary" },
-  { id: "ages-10-13", icon: FlaskConical, color: "text-brand-orange" },
-  { id: "ages-14-plus", icon: Sparkles, color: "text-brand-pink" },
-] as const;
+  { id: "ages-6-9" as const, icon: Palette, color: "text-primary" },
+  { id: "ages-10-13" as const, icon: FlaskConical, color: "text-brand-orange" },
+  { id: "ages-14-plus" as const, icon: Sparkles, color: "text-brand-pink" },
+];
 
 const campAgeLinks = [
-  { id: "ages-6-9", icon: ChefHat, color: "text-primary" },
-  { id: "ages-10-13", icon: Drama, color: "text-brand-orange" },
-  { id: "ages-14-plus", icon: Music, color: "text-brand-pink" },
-] as const;
+  { id: "ages-6-9" as const, icon: ChefHat, color: "text-primary" },
+  { id: "ages-10-13" as const, icon: Drama, color: "text-brand-orange" },
+  { id: "ages-14-plus" as const, icon: Music, color: "text-brand-pink" },
+];
 
 export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
@@ -79,7 +84,7 @@ export function Navbar() {
               <DropdownHeader title="Workshops by age" subtitle="Hands-on weekly sessions" />
               <div className="grid gap-2">
                 {workshopAgeLinks.map((l) => {
-                  const ag = ageGroups[l.id];
+                  const ag = ageGroupsData[l.id];
                   const Icon = l.icon;
                   return (
                     <Link
@@ -125,7 +130,7 @@ export function Navbar() {
               <DropdownHeader title="Summer Camp" subtitle="The best summer ever ☀️" />
               <div className="grid gap-2">
                 {campAgeLinks.map((l) => {
-                  const ag = ageGroups[l.id];
+                  const ag = ageGroupsData[l.id];
                   const Icon = l.icon;
                   return (
                     <Link
@@ -291,7 +296,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             onToggle={() => setExpanded(expanded === "workshops" ? null : "workshops")}
           >
             {workshopAgeLinks.map((l) => {
-              const ag = ageGroups[l.id];
+              const ag = ageGroupsData[l.id];
               return (
                 <Link
                   key={l.id}
@@ -318,7 +323,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             onToggle={() => setExpanded(expanded === "camps" ? null : "camps")}
           >
             {campAgeLinks.map((l) => {
-              const ag = ageGroups[l.id];
+              const ag = ageGroupsData[l.id];
               return (
                 <Link
                   key={l.id}

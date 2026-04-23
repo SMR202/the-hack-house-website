@@ -4,7 +4,7 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Check, Calendar, MessageCircle, ArrowRight, User } from "lucide-react";
-import { programs } from "@/data/programs";
+import type { Program } from "@/types/sanity";
 import { ProgramCard } from "@/components/program-card";
 
 const confettiBits = Array.from({ length: 32 }).map((_, i) => ({
@@ -18,7 +18,7 @@ const confettiBits = Array.from({ length: 32 }).map((_, i) => ({
   size: 6 + Math.random() * 8,
 }));
 
-export default function SuccessPageClient() {
+export default function SuccessPageClient({ programs }: { programs: Program[] }) {
   const searchParams = useSearchParams();
   const child = searchParams.get("child") ?? undefined;
   const program = searchParams.get("program") ?? undefined;

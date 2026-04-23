@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { MessageCircle, MapPin, Mail, Phone } from "lucide-react";
-import { team, stats } from "@/data/programs";
+import type { TeamMember, StatItem } from "@/types/sanity";
 import { Blob, Squiggle, useCountUp, WaveDivider } from "@/components/brand";
 
-export default function AboutPageClient() {
+export default function AboutPageClient({ team, stats }: { team: TeamMember[]; stats: StatItem[] }) {
   return (
     <>
       <section className="relative h-[420px] overflow-hidden md:h-[500px]">
@@ -125,10 +125,10 @@ export default function AboutPageClient() {
             <ul className="mt-6 space-y-3">
               <ContactRow icon={<MapPin className="h-4 w-4" />} label="Visit" value="123 Maple Lane, Hackville · Open Mon–Sat" />
               <ContactRow icon={<Mail className="h-4 w-4" />} label="Email" value="hello@hackhouse.kids" />
-              <ContactRow icon={<Phone className="h-4 w-4" />} label="Phone" value="+1 (555) 555-5555" />
+              <ContactRow icon={<Phone className="h-4 w-4" />} label="Phone" value="+92 316 5322764" />
             </ul>
             <a
-              href="https://wa.me/15555555555"
+              href="https://wa.me/+923165322764"
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-display text-sm font-extrabold text-white shadow-soft transition-transform hover:scale-105"
             >
               <MessageCircle className="h-4 w-4" /> Chat on WhatsApp

@@ -1,15 +1,33 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ageGroups, type AgeGroupId } from "@/data/programs";
+import { sanityFetch } from "@/sanity/lib/client";
+import {
+  AGE_GROUP_BY_KEY_QUERY,
+  PROGRAMS_BY_AGE_AND_TYPE_QUERY,
+  ALL_AGE_GROUP_KEYS_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
+import type { AgeGroup, Program, SiteSettings } from "@/types/sanity";
 import AgeGroupPageClient from "./age-group-client";
 
 interface Props {
   params: Promise<{ ageGroup: string }>;
 }
 
+export async function generateStaticParams() {
+  const keys = await sanityFetch<{ ageGroup: string }[]>({
+    query: ALL_AGE_GROUP_KEYS_QUERY,
+    revalidate: 3600,
+  });
+  return keys ?? [];
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ageGroup } = await params;
-  const ag = ageGroups[ageGroup as AgeGroupId];
+  const ag = await sanityFetch<AgeGroup | null>({
+    query: AGE_GROUP_BY_KEY_QUERY,
+    params: { key: ageGroup },
+  });
   if (!ag) return { title: "Workshops · The Hack House" };
   const title = `${ag.name} (${ag.range}) — Workshops`;
   return {
@@ -24,8 +42,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AgeGroupPage({ params }: Props) {
   const { ageGroup } = await params;
-  if (!ageGroups[ageGroup as AgeGroupId]) {
+
+  const [ag, programs, settings] = await Promise.all([
+    sanityFetch<AgeGroup | null>({ query: AGE_GROUP_BY_KEY_QUERY, params: { key: ageGroup } }),
+    sanityFetch<Program[]>({ query: PROGRAMS_BY_AGE_AND_TYPE_QUERY, params: { ageGroup, type: "workshop" } }),
+    sanityFetch<SiteSettings | null>({ query: SITE_SETTINGS_QUERY }),
+  ]);
+
+  if (!ag) {
     notFound();
   }
-  return <AgeGroupPageClient ageGroup={ageGroup} />;
+
+  return (
+    <AgeGroupPageClient
+      ageGroup={ag}
+      programs={programs}
+      categories={settings?.categories ?? []}
+    />
+  );
 }

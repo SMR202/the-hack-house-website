@@ -1,0 +1,206 @@
+import { defineType, defineField } from "sanity";
+
+export const program = defineType({
+  name: "program",
+  title: "Program",
+  type: "document",
+  fields: [
+    defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "title", maxLength: 96 },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "category",
+      title: "Category ID",
+      type: "string",
+      options: {
+        list: [
+          { title: "Arts & Crafts", value: "arts" },
+          { title: "Cooking", value: "cooking" },
+          { title: "Science", value: "science" },
+          { title: "Sports", value: "sports" },
+          { title: "Drama", value: "drama" },
+          { title: "Music", value: "music" },
+        ],
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "categoryLabel",
+      title: "Category Label",
+      type: "string",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "categoryEmoji",
+      title: "Category Emoji",
+      type: "string",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "ageGroup",
+      title: "Age Group",
+      type: "string",
+      options: {
+        list: [
+          { title: "Ages 6–9", value: "ages-6-9" },
+          { title: "Ages 10–13", value: "ages-10-13" },
+          { title: "Ages 14+", value: "ages-14-plus" },
+        ],
+        layout: "radio",
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "ageLabel",
+      title: "Age Label",
+      type: "string",
+      description: 'e.g. "Ages 8–12"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "duration",
+      title: "Duration",
+      type: "string",
+      description: 'e.g. "6 weeks · 90 min/session"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "price",
+      title: "Price",
+      type: "string",
+      description: 'e.g. "$180"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "spotsLeft",
+      title: "Spots Left",
+      type: "number",
+      validation: (rule) => rule.required().min(0),
+    }),
+    defineField({
+      name: "totalSpots",
+      title: "Total Spots",
+      type: "number",
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: "dates",
+      title: "Dates",
+      type: "string",
+      description: 'e.g. "Sat, Apr 26 — May 31"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "time",
+      title: "Time",
+      type: "string",
+      description: 'e.g. "10:00 AM"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "location",
+      title: "Location",
+      type: "string",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "image",
+      title: "Main Image URL",
+      type: "url",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "gallery",
+      title: "Gallery Image URLs",
+      type: "array",
+      of: [{ type: "url" }],
+    }),
+    defineField({
+      name: "shortDescription",
+      title: "Short Description",
+      type: "text",
+      rows: 2,
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "longDescription",
+      title: "Long Description",
+      type: "text",
+      rows: 5,
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "whatKidsWillDo",
+      title: "What Kids Will Do",
+      type: "array",
+      of: [{ type: "string" }],
+      validation: (rule) => rule.required().min(1),
+    }),
+    defineField({
+      name: "instructor",
+      title: "Instructor",
+      type: "object",
+      fields: [
+        defineField({ name: "name", title: "Name", type: "string", validation: (r) => r.required() }),
+        defineField({ name: "role", title: "Role", type: "string", validation: (r) => r.required() }),
+        defineField({ name: "bio", title: "Bio", type: "text", rows: 2, validation: (r) => r.required() }),
+        defineField({ name: "photo", title: "Photo URL", type: "url", validation: (r) => r.required() }),
+      ],
+    }),
+    defineField({
+      name: "type",
+      title: "Program Type",
+      type: "string",
+      options: {
+        list: [
+          { title: "Workshop", value: "workshop" },
+          { title: "Camp", value: "camp" },
+        ],
+        layout: "radio",
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "campType",
+      title: "Camp Type",
+      type: "string",
+      options: {
+        list: [
+          { title: "Day Camp", value: "Day Camp" },
+          { title: "Residential", value: "Residential" },
+        ],
+      },
+      hidden: ({ parent }) => parent?.type !== "camp",
+    }),
+    defineField({
+      name: "featured",
+      title: "Featured",
+      type: "boolean",
+      initialValue: false,
+      description: "Show this program on the homepage featured section",
+    }),
+    defineField({
+      name: "order",
+      title: "Sort Order",
+      type: "number",
+      description: "Lower numbers appear first",
+    }),
+  ],
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "ageLabel",
+      media: "image",
+    },
+  },
+});

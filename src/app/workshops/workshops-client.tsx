@@ -2,15 +2,26 @@
 
 import Link from "next/link";
 import { ArrowRight, Sparkles, Wrench } from "lucide-react";
-import { ageGroups, programs } from "@/data/programs";
+import type { Program, AgeGroup, AgeGroupId } from "@/types/sanity";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Blob, WaveDivider } from "@/components/brand";
 
-export default function WorkshopsLandingClient() {
+interface Props {
+  programs: Program[];
+  ageGroups: AgeGroup[];
+}
+
+export default function WorkshopsLandingClient({ programs, ageGroups }: Props) {
   const groups = (["ages-6-9", "ages-10-13", "ages-14-plus"] as const).map((id) => {
-    const ag = ageGroups[id];
+    const ag = ageGroups.find((g) => g.key === id);
     const count = programs.filter((p) => p.ageGroup === id && p.type === "workshop").length;
-    return { ...ag, count };
+    return {
+      id,
+      name: ag?.name ?? id,
+      range: ag?.range ?? "",
+      tagline: ag?.tagline ?? "",
+      count,
+    };
   });
 
   const styles: Record<string, { bg: string; text: string; sticker: string }> = {

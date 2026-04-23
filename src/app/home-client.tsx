@@ -6,37 +6,18 @@ import {
   ArrowRight, Sparkles, Palette, ChefHat, FlaskConical, Trophy, Drama, Music,
   Search, FileText, MessageCircle, Star, Quote, Play,
 } from "lucide-react";
-import { programs, testimonials, categories } from "@/data/programs";
+import type { Program, Testimonial, CategoryItem, HeroSlide } from "@/types/sanity";
 import { ProgramCard } from "@/components/program-card";
 import { Squiggle, Blob, WaveDivider } from "@/components/brand";
 
-const featuredIds = ["watercolor-wonders", "tiny-chefs", "stage-stars"];
-const featured = featuredIds.map((id) => programs.find((p) => p.id === id)!).filter(Boolean);
-
-export default function HomePageClient() {
-  return (
-    <>
-      <Hero />
-      <FeaturedPrograms />
-      <ActivityCategoriesStrip />
-      <HowItWorks />
-      <Testimonials />
-    </>
-  );
+interface HomePageClientProps {
+  featured: Program[];
+  testimonials: Testimonial[];
+  categories: CategoryItem[];
+  heroSlides: HeroSlide[];
 }
 
-/* ---------------- HERO ---------------- */
-
-const stickerData = [
-  { emoji: "🎨", className: "left-[6%] top-[18%]", rot: -8 },
-  { emoji: "🍳", className: "left-[12%] top-[68%]", rot: 6 },
-  { emoji: "⚽", className: "right-[8%] top-[14%]", rot: 10 },
-  { emoji: "🎭", className: "right-[12%] top-[72%]", rot: -6 },
-  { emoji: "🔬", className: "left-[40%] top-[8%]", rot: 4 },
-  { emoji: "🎵", className: "right-[36%] bottom-[6%]", rot: -10 },
-];
-
-const slides = [
+const fallbackSlides: HeroSlide[] = [
   {
     image: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
     title: "Watercolor Wonders",
@@ -57,7 +38,42 @@ const slides = [
   },
 ];
 
-function Hero() {
+const fallbackCategories: CategoryItem[] = [
+  { id: "arts", label: "Arts & Crafts", emoji: "🎨" },
+  { id: "cooking", label: "Cooking", emoji: "🍳" },
+  { id: "science", label: "Science", emoji: "🔬" },
+  { id: "sports", label: "Sports", emoji: "⚽" },
+  { id: "drama", label: "Drama", emoji: "🎭" },
+  { id: "music", label: "Music", emoji: "🎵" },
+];
+
+export default function HomePageClient({ featured, testimonials, categories, heroSlides }: HomePageClientProps) {
+  const slides = heroSlides.length > 0 ? heroSlides : fallbackSlides;
+  const cats = categories.length > 0 ? categories : fallbackCategories;
+
+  return (
+    <>
+      <Hero slides={slides} />
+      <FeaturedPrograms featured={featured} />
+      <ActivityCategoriesStrip categories={cats} />
+      <HowItWorks />
+      <Testimonials testimonials={testimonials} />
+    </>
+  );
+}
+
+/* ---------------- HERO ---------------- */
+
+const stickerData = [
+  { emoji: "🎨", className: "left-[6%] top-[18%]", rot: -8 },
+  { emoji: "🍳", className: "left-[12%] top-[68%]", rot: 6 },
+  { emoji: "⚽", className: "right-[8%] top-[14%]", rot: 10 },
+  { emoji: "🎭", className: "right-[12%] top-[72%]", rot: -6 },
+  { emoji: "🔬", className: "left-[40%] top-[8%]", rot: 4 },
+  { emoji: "🎵", className: "right-[36%] bottom-[6%]", rot: -10 },
+];
+
+function Hero({ slides }: { slides: HeroSlide[] }) {
   const [active, setActive] = React.useState(0);
   const [paused, setPaused] = React.useState(false);
 
@@ -65,7 +81,7 @@ function Hero() {
     if (paused) return;
     const t = setInterval(() => setActive((i) => (i + 1) % slides.length), 4000);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, slides.length]);
 
   return (
     <section className="relative overflow-hidden bg-brand-teal text-white">
@@ -188,7 +204,7 @@ function Hero() {
 
 /* ---------------- FEATURED ---------------- */
 
-function FeaturedPrograms() {
+function FeaturedPrograms({ featured }: { featured: Program[] }) {
   return (
     <section className="relative overflow-hidden bg-background py-20">
       <Blob className="-right-20 top-20 h-72 w-72" color="var(--color-brand-orange)" opacity={0.08} />
@@ -230,7 +246,7 @@ const categoryIcons: Record<string, React.ComponentType<{ className?: string }>>
   music: Music,
 };
 
-function ActivityCategoriesStrip() {
+function ActivityCategoriesStrip({ categories }: { categories: CategoryItem[] }) {
   return (
     <section className="relative overflow-hidden bg-brand-mint py-20">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
@@ -332,7 +348,7 @@ function HowItWorks() {
 
 /* ---------------- TESTIMONIALS ---------------- */
 
-function Testimonials() {
+function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   return (
     <section className="relative overflow-hidden bg-[oklch(0.97_0.04_55)] py-20">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
@@ -344,9 +360,9 @@ function Testimonials() {
         </div>
 
         <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
-          {testimonials.map((t) => (
+          {testimonials.map((t, idx) => (
             <article
-              key={t.id}
+              key={t._id ?? idx}
               className="snap-start shrink-0 w-[320px] sm:w-[380px] rounded-3xl bg-white p-7 shadow-soft"
             >
               <Quote className="h-9 w-9 text-primary/70" />

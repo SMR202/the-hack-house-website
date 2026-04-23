@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { sanityFetch } from "@/sanity/lib/client";
+import { ALL_CAMPS_QUERY, ALL_AGE_GROUPS_QUERY } from "@/sanity/lib/queries";
+import type { Program, AgeGroup } from "@/types/sanity";
 import SummerCampClient from "./summer-camp-client";
 
 export const metadata: Metadata = {
@@ -14,6 +17,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SummerCampPage() {
-  return <SummerCampClient />;
+export default async function SummerCampPage() {
+  const [camps, ageGroups] = await Promise.all([
+    sanityFetch<Program[]>({ query: ALL_CAMPS_QUERY }),
+    sanityFetch<AgeGroup[]>({ query: ALL_AGE_GROUPS_QUERY }),
+  ]);
+
+  return <SummerCampClient camps={camps} ageGroups={ageGroups} />;
 }

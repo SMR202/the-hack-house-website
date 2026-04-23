@@ -2,17 +2,32 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ageGroups, categories, programs, type AgeGroupId, type CategoryId } from "@/data/programs";
+import type { AgeGroup, Program, CategoryItem, CategoryId } from "@/types/sanity";
 import { ProgramCard } from "@/components/program-card";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Blob, WaveDivider } from "@/components/brand";
 
-export default function AgeGroupPageClient({ ageGroup }: { ageGroup: string }) {
-  const ag = ageGroups[ageGroup as AgeGroupId];
+const fallbackCategories: CategoryItem[] = [
+  { id: "all", label: "All", emoji: "✨" },
+  { id: "arts", label: "Arts & Crafts", emoji: "🎨" },
+  { id: "cooking", label: "Cooking", emoji: "🍳" },
+  { id: "science", label: "Science", emoji: "🔬" },
+  { id: "sports", label: "Sports", emoji: "⚽" },
+  { id: "drama", label: "Drama", emoji: "🎭" },
+  { id: "music", label: "Music", emoji: "🎵" },
+];
+
+interface Props {
+  ageGroup: AgeGroup;
+  programs: Program[];
+  categories: CategoryItem[];
+}
+
+export default function AgeGroupPageClient({ ageGroup: ag, programs, categories: catsProp }: Props) {
+  const cats = catsProp.length > 0 ? [{ id: "all", label: "All", emoji: "✨" }, ...catsProp] : fallbackCategories;
   const [filter, setFilter] = React.useState<CategoryId | "all">("all");
 
-  const list = programs.filter((p) => p.ageGroup === ageGroup && p.type === "workshop");
-  const filtered = filter === "all" ? list : list.filter((p) => p.category === filter);
+  const filtered = filter === "all" ? programs : programs.filter((p) => p.category === filter);
 
   return (
     <>
@@ -43,13 +58,13 @@ export default function AgeGroupPageClient({ ageGroup }: { ageGroup: string }) {
       <section className="bg-background py-12">
         <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="no-scrollbar -mx-6 flex gap-2 overflow-x-auto px-6 pb-2 md:mx-0 md:flex-wrap md:px-0">
-            {categories.map((c) => {
+            {cats.map((c) => {
               const active = filter === c.id;
               return (
                 <button
                   key={c.id}
                   type="button"
-                  onClick={() => setFilter(c.id)}
+                  onClick={() => setFilter(c.id as CategoryId | "all")}
                   className={`shrink-0 rounded-full border-2 px-4 py-2 font-display text-sm font-extrabold transition-all ${
                     active
                       ? "border-brand-orange bg-brand-orange text-white shadow-glow-orange"

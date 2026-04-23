@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Program } from "@/data/programs";
+import type { Program } from "@/types/sanity";
 import { ArrowRight } from "lucide-react";
 
 export function ProgramCard({ program }: { program: Program }) {

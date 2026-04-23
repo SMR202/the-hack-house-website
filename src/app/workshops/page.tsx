@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { sanityFetch } from "@/sanity/lib/client";
+import { ALL_WORKSHOPS_QUERY, ALL_AGE_GROUPS_QUERY } from "@/sanity/lib/queries";
+import type { Program, AgeGroup } from "@/types/sanity";
 import WorkshopsLandingClient from "./workshops-client";
 
 export const metadata: Metadata = {
@@ -11,6 +14,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function WorkshopsPage() {
-  return <WorkshopsLandingClient />;
+export default async function WorkshopsPage() {
+  const [programs, ageGroups] = await Promise.all([
+    sanityFetch<Program[]>({ query: ALL_WORKSHOPS_QUERY }),
+    sanityFetch<AgeGroup[]>({ query: ALL_AGE_GROUPS_QUERY }),
+  ]);
+
+  return <WorkshopsLandingClient programs={programs} ageGroups={ageGroups} />;
 }

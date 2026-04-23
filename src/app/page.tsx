@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import { sanityFetch } from "@/sanity/lib/client";
+import {
+  FEATURED_PROGRAMS_QUERY,
+  ALL_TESTIMONIALS_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
+import type { Program, Testimonial, SiteSettings } from "@/types/sanity";
 import HomePageClient from "./home-client";
 
 export const metadata: Metadata = {
@@ -14,6 +21,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  return <HomePageClient />;
+export default async function HomePage() {
+  const [featured, testimonials, settings] = await Promise.all([
+    sanityFetch<Program[]>({ query: FEATURED_PROGRAMS_QUERY }),
+    sanityFetch<Testimonial[]>({ query: ALL_TESTIMONIALS_QUERY }),
+    sanityFetch<SiteSettings | null>({ query: SITE_SETTINGS_QUERY }),
+  ]);
+
+  return (
+    <HomePageClient
+      featured={featured}
+      testimonials={testimonials}
+      categories={settings?.categories ?? []}
+      heroSlides={settings?.heroSlides ?? []}
+    />
+  );
 }

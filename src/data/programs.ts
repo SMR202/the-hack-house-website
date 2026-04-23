@@ -442,9 +442,9 @@ export const programs: Program[] = [
     dates: "Mon, Jul 14 — Fri, Jul 25",
     time: "9:00 AM",
     location: "Hack House Main Campus",
-    image: stock("1597149961419-0e1cb50ff62c"),
+    image: stock("1532094349884-543bc11b234d"),
     gallery: [
-      stock("1597149961419-0e1cb50ff62c"),
+      stock("1532094349884-543bc11b234d"),
       stock("1532094349884-543bc11b234d"),
       stock("1551958219-acbc608c6377"),
       stock("1503095396549-807759245b35"),

@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import RegisterPageClient from "./register-client";
+import { sanityFetch } from "@/sanity/lib/client";
+import { ALL_PROGRAMS_QUERY } from "@/sanity/lib/queries";
+import type { Program } from "@/types/sanity";
+import RegisterClient from "./register-client";
 
 export const metadata: Metadata = {
-  title: "Register Your Child · The Hack House",
-  description: "Quick and easy registration for Hack House workshops and summer camps. Takes under 2 minutes.",
+  title: "Register — The Hack House",
+  description: "Secure your child's spot in a Hack House workshop or summer camp.",
   openGraph: {
-    title: "Register Your Child · The Hack House",
-    description: "Grab your spot before it fills up!",
+    title: "Register — The Hack House",
+    description: "Secure your child's spot in a Hack House program.",
   },
 };
 
-export default function RegisterPage() {
-  return (
-    <Suspense>
-      <RegisterPageClient />
-    </Suspense>
-  );
+export default async function RegisterPage() {
+  const programs = await sanityFetch<Program[]>({ query: ALL_PROGRAMS_QUERY });
+  return <RegisterClient programs={programs} />;
 }

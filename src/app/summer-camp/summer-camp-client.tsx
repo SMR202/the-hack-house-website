@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { ArrowRight, Sun } from "lucide-react";
-import { ageGroups, programs } from "@/data/programs";
+import type { Program, AgeGroup } from "@/types/sanity";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProgramCard } from "@/components/program-card";
 import { Blob, WaveDivider } from "@/components/brand";
 
-export default function SummerCampClient() {
-  const camps = programs.filter((p) => p.type === "camp");
+interface Props {
+  camps: Program[];
+  ageGroups: AgeGroup[];
+}
 
+export default function SummerCampClient({ camps, ageGroups }: Props) {
   const groupCards = (["ages-6-9", "ages-10-13", "ages-14-plus"] as const).map((id) => {
-    const ag = ageGroups[id];
+    const ag = ageGroups.find((g) => g.key === id);
     const camp = camps.find((c) => c.ageGroup === id);
     return { id, ag, camp };
   });
@@ -71,10 +74,10 @@ export default function SummerCampClient() {
                   </div>
                   <div className="relative">
                     <div className="font-display text-sm font-extrabold uppercase tracking-wider opacity-90">
-                      {ag.campRange}
+                      {ag?.campRange ?? ""}
                     </div>
-                    <h3 className="mt-1 font-display text-3xl font-black">{ag.campName}</h3>
-                    <p className="mt-2 text-base opacity-90">{ag.tagline}</p>
+                    <h3 className="mt-1 font-display text-3xl font-black">{ag?.campName ?? ""}</h3>
+                    <p className="mt-2 text-base opacity-90">{ag?.tagline ?? ""}</p>
                     {camp && (
                       <div className="mt-4 flex items-center gap-2">
                         <span className="rounded-full bg-white/20 px-3 py-1 font-display text-xs font-extrabold">

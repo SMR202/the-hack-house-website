@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ageGroups, programs, getProgramById, type AgeGroupId } from "@/data/programs";
+import type { Program, AgeGroupId } from "@/types/sanity";
 import { MessageCircle, ArrowRight, Phone, Mail, User, Heart, Info } from "lucide-react";
 import { Blob } from "@/components/brand";
 
@@ -21,12 +21,12 @@ interface FormState {
   notes: string;
 }
 
-export default function RegisterPageClient() {
+export default function RegisterClient({ programs }: { programs: Program[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const programParam = searchParams.get("program") ?? undefined;
 
-  const preselected = programParam ? getProgramById(programParam) : undefined;
+  const preselected = programParam ? programs.find((p) => p.id === programParam) : undefined;
 
   const [form, setForm] = React.useState<FormState>({
     childName: "",
@@ -72,7 +72,7 @@ export default function RegisterPageClient() {
       firstErr?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    const program = getProgramById(form.programId);
+    const program = programs.find((p) => p.id === form.programId);
     const params = new URLSearchParams();
     if (form.childName) params.set("child", form.childName);
     if (program?.title) params.set("program", program.title);
@@ -218,11 +218,9 @@ export default function RegisterPageClient() {
                   className={inputCls(false)}
                 >
                   <option value="">Any age group</option>
-                  {Object.values(ageGroups).map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.range} · {form.type === "camp" ? g.campName : g.name}
-                    </option>
-                  ))}
+                  <option value="ages-6-9">Ages 6–9</option>
+                  <option value="ages-10-13">Ages 10–13</option>
+                  <option value="ages-14-plus">Ages 14+</option>
                 </select>
               </Field>
               <Field label="Program" required error={errors.programId}>

@@ -6,13 +6,11 @@ import {
   Calendar, Clock, Hourglass, Users, MapPin, MessageCircle, Share2,
   CheckCircle2, X as XIcon, ArrowRight, Award,
 } from "lucide-react";
-import { getProgramById, getRelatedPrograms } from "@/data/programs";
+import type { Program } from "@/types/sanity";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProgramCard } from "@/components/program-card";
 
-export default function ProgramDetailClient({ programId }: { programId: string }) {
-  const program = getProgramById(programId)!;
-  const related = getRelatedPrograms(program, 3);
+export default function ProgramDetailClient({ program, related }: { program: Program; related: Program[] }) {
   const fillPct = Math.round(((program.totalSpots - program.spotsLeft) / program.totalSpots) * 100);
   const urgency = program.spotsLeft <= 3;
 
