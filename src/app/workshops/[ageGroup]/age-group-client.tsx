@@ -21,9 +21,10 @@ interface Props {
   ageGroup: AgeGroup;
   programs: Program[];
   categories: CategoryItem[];
+  whatsapp?: string;
 }
 
-export default function AgeGroupPageClient({ ageGroup: ag, programs, categories: catsProp }: Props) {
+export default function AgeGroupPageClient({ ageGroup: ag, programs, categories: catsProp, whatsapp }: Props) {
   const cats = catsProp.length > 0 ? [{ id: "all", label: "All", emoji: "✨" }, ...catsProp] : fallbackCategories;
   const [filter, setFilter] = React.useState<CategoryId | "all">("all");
 
@@ -80,7 +81,7 @@ export default function AgeGroupPageClient({ ageGroup: ag, programs, categories:
 
           <div className="mt-10">
             {filtered.length === 0 ? (
-              <EmptyState />
+              <EmptyState whatsapp={whatsapp} />
             ) : (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {filtered.map((p) => (
@@ -95,7 +96,10 @@ export default function AgeGroupPageClient({ ageGroup: ag, programs, categories:
   );
 }
 
-function EmptyState() {
+function EmptyState({ whatsapp }: { whatsapp?: string }) {
+  const displayWhatsapp = whatsapp || "+92 316 5322764";
+  const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
+
   return (
     <div className="mx-auto max-w-md rounded-3xl bg-white p-10 text-center shadow-soft">
       <div className="text-6xl">🌱</div>
@@ -104,7 +108,7 @@ function EmptyState() {
         We&apos;re cooking up new programs in this category. Check back soon — or send us a WhatsApp to be notified first.
       </p>
       <a
-        href="https://wa.me/15555555555"
+        href={waLink}
         className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-display text-sm font-extrabold text-white"
       >
         Notify me

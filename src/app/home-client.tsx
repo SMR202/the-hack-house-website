@@ -349,6 +349,9 @@ function HowItWorks() {
 /* ---------------- TESTIMONIALS ---------------- */
 
 function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  const items = [...testimonials, ...testimonials, ...testimonials];
+  const duplicated = [...items, ...items];
+
   return (
     <section className="relative overflow-hidden bg-[oklch(0.97_0.04_55)] py-20">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
@@ -358,12 +361,14 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
           </h2>
           <p className="mt-3 text-text-soft">A few kind words from the Hack House family.</p>
         </div>
+      </div>
 
-        <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
-          {testimonials.map((t, idx) => (
+      <div className="group mt-12 flex overflow-hidden">
+        <div className="flex w-max animate-marquee gap-5 px-5 hover:[animation-play-state:paused]">
+          {duplicated.map((t, idx) => (
             <article
-              key={t._id ?? idx}
-              className="snap-start shrink-0 w-[320px] sm:w-[380px] rounded-3xl bg-white p-7 shadow-soft"
+              key={`${t._id ?? 't'}-${idx}`}
+              className="shrink-0 w-[320px] sm:w-[380px] rounded-3xl bg-white p-7 shadow-soft"
             >
               <Quote className="h-9 w-9 text-primary/70" />
               <p className="mt-3 text-base leading-relaxed text-brand-teal">&quot;{t.quote}&quot;</p>

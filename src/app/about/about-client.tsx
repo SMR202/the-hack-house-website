@@ -5,7 +5,9 @@ import { MessageCircle, MapPin, Mail, Phone } from "lucide-react";
 import type { TeamMember, StatItem } from "@/types/sanity";
 import { Blob, Squiggle, useCountUp, WaveDivider } from "@/components/brand";
 
-export default function AboutPageClient({ team, stats }: { team: TeamMember[]; stats: StatItem[] }) {
+export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamMember[]; stats: StatItem[]; whatsapp?: string }) {
+  const displayWhatsapp = whatsapp || "+92 316 5322764";
+  const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
   return (
     <>
       <section className="relative h-[420px] overflow-hidden md:h-[500px]">
@@ -125,10 +127,10 @@ export default function AboutPageClient({ team, stats }: { team: TeamMember[]; s
             <ul className="mt-6 space-y-3">
               <ContactRow icon={<MapPin className="h-4 w-4" />} label="Visit" value="123 Maple Lane, Hackville · Open Mon–Sat" />
               <ContactRow icon={<Mail className="h-4 w-4" />} label="Email" value="hello@hackhouse.kids" />
-              <ContactRow icon={<Phone className="h-4 w-4" />} label="Phone" value="+92 316 5322764" />
+              <ContactRow icon={<Phone className="h-4 w-4" />} label="Phone" value={displayWhatsapp} />
             </ul>
             <a
-              href="https://wa.me/+923165322764"
+              href={waLink}
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-display text-sm font-extrabold text-white shadow-soft transition-transform hover:scale-105"
             >
               <MessageCircle className="h-4 w-4" /> Chat on WhatsApp

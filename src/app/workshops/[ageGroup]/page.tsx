@@ -58,6 +58,7 @@ export default async function AgeGroupPage({ params }: Props) {
       ageGroup={ag}
       programs={programs}
       categories={settings?.categories ?? []}
+      whatsapp={settings?.whatsappNumber}
     />
   );
 }

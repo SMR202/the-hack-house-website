@@ -2,7 +2,15 @@ import Link from "next/link";
 import { Instagram, Facebook, MessageCircle } from "lucide-react";
 import { HouseLogo } from "./brand";
 
-export function Footer() {
+import { sanityFetch } from "@/sanity/lib/client";
+import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import type { SiteSettings } from "@/types/sanity";
+
+export async function Footer() {
+  const settings = await sanityFetch<SiteSettings | null>({ query: SITE_SETTINGS_QUERY });
+  const displayWhatsapp = settings?.whatsappNumber || "+92 316 5322764";
+  const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
+
   return (
     <footer className="relative mt-20 overflow-hidden bg-brand-teal text-white">
       <div className="absolute inset-0 bg-confetti-dark opacity-60" aria-hidden />
@@ -18,7 +26,7 @@ export function Footer() {
             </p>
             <div className="mt-6 flex items-center gap-3">
               <a
-                href="https://wa.me/15555555555"
+                href={waLink}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-105"

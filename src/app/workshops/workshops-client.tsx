@@ -9,9 +9,10 @@ import { Blob, WaveDivider } from "@/components/brand";
 interface Props {
   programs: Program[];
   ageGroups: AgeGroup[];
+  whatsapp?: string;
 }
 
-export default function WorkshopsLandingClient({ programs, ageGroups }: Props) {
+export default function WorkshopsLandingClient({ programs, ageGroups, whatsapp }: Props) {
   const groups = (["ages-6-9", "ages-10-13", "ages-14-plus"] as const).map((id) => {
     const ag = ageGroups.find((g) => g.key === id);
     const count = programs.filter((p) => p.ageGroup === id && p.type === "workshop").length;
@@ -29,6 +30,9 @@ export default function WorkshopsLandingClient({ programs, ageGroups }: Props) {
     "ages-10-13": { bg: "bg-brand-orange", text: "text-white", sticker: "🛠️" },
     "ages-14-plus": { bg: "bg-brand-teal", text: "text-white", sticker: "⭐" },
   };
+
+  const displayWhatsapp = whatsapp || "+92 316 5322764";
+  const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
 
   return (
     <>
@@ -105,7 +109,7 @@ export default function WorkshopsLandingClient({ programs, ageGroups }: Props) {
               Send us a quick WhatsApp message and we&apos;ll help you pick the perfect program for your child.
             </p>
             <a
-              href="https://wa.me/15555555555"
+              href={waLink}
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-display text-sm font-extrabold text-white shadow-soft transition-transform hover:scale-105"
             >
               Chat with us

@@ -23,6 +23,7 @@ export default async function AboutPage() {
     <AboutPageClient
       team={settings?.team ?? []}
       stats={settings?.stats ?? []}
+      whatsapp={settings?.whatsappNumber}
     />
   );
 }

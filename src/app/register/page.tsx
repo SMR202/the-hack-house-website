@@ -13,7 +13,13 @@ export const metadata: Metadata = {
   },
 };
 
+import { Suspense } from "react";
+
 export default async function RegisterPage() {
   const programs = await sanityFetch<Program[]>({ query: ALL_PROGRAMS_QUERY });
-  return <RegisterClient programs={programs} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RegisterClient programs={programs} />
+    </Suspense>
+  );
 }

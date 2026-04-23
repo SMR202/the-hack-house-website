@@ -67,6 +67,7 @@
   --animate-progress: progress-fill 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-check-draw: check-draw 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s both;
   --animate-check-pop: check-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-marquee: marquee 40s linear infinite;
 }
 
 @keyframes fade-up {
@@ -114,6 +115,10 @@
 @keyframes check-draw {
   0% { stroke-dashoffset: 60; }
   100% { stroke-dashoffset: 0; }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 10px)); }
 }
 
 :root {

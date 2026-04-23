@@ -99,7 +99,7 @@ async function seed() {
       featured: featured ?? false,
       order: order ?? 99,
       ...rest,
-    });
+    } as any);
     console.log(`  ✅ program: ${p.title}`);
   }
 
