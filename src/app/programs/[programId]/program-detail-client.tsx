@@ -1,5 +1,7 @@
+"use client";
+
 import * as React from "react";
-import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import Link from "next/link";
 import {
   Calendar, Clock, Hourglass, Users, MapPin, MessageCircle, Share2,
   CheckCircle2, X as XIcon, ArrowRight, Award,
@@ -8,41 +10,7 @@ import { getProgramById, getRelatedPrograms } from "@/data/programs";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProgramCard } from "@/components/program-card";
 
-export const Route = createFileRoute("/programs/$programId")({
-  head: ({ params }) => {
-    const program = getProgramById(params.programId);
-    if (!program) {
-      return { meta: [{ title: "Program not found · The Hack House" }] };
-    }
-    return {
-      meta: [
-        { title: `${program.title} · The Hack House` },
-        { name: "description", content: program.shortDescription },
-        { property: "og:title", content: `${program.title} · The Hack House` },
-        { property: "og:description", content: program.shortDescription },
-        { property: "og:image", content: program.image },
-        { property: "og:type", content: "article" },
-      ],
-    };
-  },
-  loader: ({ params }) => {
-    if (!getProgramById(params.programId)) throw notFound();
-    return {};
-  },
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-xl px-6 py-24 text-center">
-      <div className="text-5xl">🔍</div>
-      <h1 className="mt-3 font-display text-3xl font-extrabold text-brand-teal">Program not found</h1>
-      <Link to="/workshops" className="mt-5 inline-block font-display font-bold text-primary">
-        ← Browse workshops
-      </Link>
-    </div>
-  ),
-  component: ProgramDetailPage,
-});
-
-function ProgramDetailPage() {
-  const { programId } = Route.useParams();
+export default function ProgramDetailClient({ programId }: { programId: string }) {
   const program = getProgramById(programId)!;
   const related = getRelatedPrograms(program, 3);
   const fillPct = Math.round(((program.totalSpots - program.spotsLeft) / program.totalSpots) * 100);
@@ -60,8 +28,8 @@ function ProgramDetailPage() {
           <div className="text-white">
             <Breadcrumbs
               items={[
-                { label: "Home", to: "/" },
-                { label: program.type === "camp" ? "Summer Camp" : "Workshops", to: program.type === "camp" ? "/summer-camp" : "/workshops" },
+                { label: "Home", href: "/" },
+                { label: program.type === "camp" ? "Summer Camp" : "Workshops", href: program.type === "camp" ? "/summer-camp" : "/workshops" },
                 { label: program.title },
               ]}
             />
@@ -173,8 +141,7 @@ function ProgramDetailPage() {
               </div>
 
               <Link
-                to="/register"
-                search={{ program: program.id }}
+                href={`/register?program=${program.id}`}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.02]"
               >
                 Register for This Program
@@ -224,8 +191,7 @@ function ProgramDetailPage() {
             <div className="text-[11px] text-text-soft">{program.spotsLeft} spots left</div>
           </div>
           <Link
-            to="/register"
-            search={{ program: program.id }}
+            href={`/register?program=${program.id}`}
             className="ml-auto inline-flex items-center justify-center gap-1 rounded-full bg-brand-orange px-5 py-3 font-display text-sm font-extrabold text-white shadow-glow-orange"
           >
             Register <ArrowRight className="h-4 w-4" />

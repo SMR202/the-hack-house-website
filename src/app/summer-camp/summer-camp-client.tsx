@@ -1,32 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { ArrowRight, Sun } from "lucide-react";
 import { ageGroups, programs } from "@/data/programs";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProgramCard } from "@/components/program-card";
 import { Blob, WaveDivider } from "@/components/brand";
 
-export const Route = createFileRoute("/summer-camp")({
-  head: () => ({
-    meta: [
-      { title: "Summer Camp — The Hack House" },
-      {
-        name: "description",
-        content:
-          "The best summer your child has ever had. Day camps and residential adventures for kids aged 5–14, all summer long.",
-      },
-      { property: "og:title", content: "Summer Camp — The Hack House" },
-      { property: "og:description", content: "The best summer your child has ever had ☀️" },
-      {
-        property: "og:image",
-        content:
-          "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=1200&q=80",
-      },
-    ],
-  }),
-  component: SummerCampLanding,
-});
-
-function SummerCampLanding() {
+export default function SummerCampClient() {
   const camps = programs.filter((p) => p.type === "camp");
 
   const groupCards = (["ages-6-9", "ages-10-13", "ages-14-plus"] as const).map((id) => {
@@ -48,7 +29,7 @@ function SummerCampLanding() {
         <Blob className="-left-24 -top-12 h-80 w-80" color="white" opacity={0.18} />
         <Blob className="-right-32 bottom-0 h-96 w-96" color="var(--color-brand-yellow)" opacity={0.2} />
         <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-10 md:px-8 md:pb-32 md:pt-16">
-          <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Summer Camp" }]} />
+          <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Summer Camp" }]} />
           <div className="max-w-2xl animate-[fade-up_0.6s_ease-out]">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide">
               <Sun className="h-3.5 w-3.5" /> Summer 2025
@@ -79,8 +60,7 @@ function SummerCampLanding() {
               return (
                 <Link
                   key={id}
-                  to={camp ? "/programs/$programId" : "/summer-camp"}
-                  params={camp ? { programId: camp.id } : undefined}
+                  href={camp ? `/programs/${camp.id}` : "/summer-camp"}
                   className={`group relative overflow-hidden rounded-3xl ${s.bg} p-7 text-white shadow-soft transition-all hover:-translate-y-2 hover:shadow-lift`}
                 >
                   <div

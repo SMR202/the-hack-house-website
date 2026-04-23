@@ -1,12 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 export interface Crumb {
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  to?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  params?: any;
+  href?: string;
 }
 
 export function Breadcrumbs({ items }: { items: Crumb[] }) {
@@ -16,8 +13,8 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
         const isLast = i === items.length - 1;
         return (
           <span key={i} className="flex items-center gap-1.5">
-            {item.to && !isLast ? (
-              <Link to={item.to} params={item.params} className="font-medium hover:text-primary">
+            {item.href && !isLast ? (
+              <Link href={item.href} className="font-medium hover:text-primary">
                 {item.label}
               </Link>
             ) : (

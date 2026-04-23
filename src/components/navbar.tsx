@@ -1,5 +1,8 @@
+"use client";
+
 import * as React from "react";
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Sparkles, Palette, ChefHat, FlaskConical, Trophy, Drama, Music } from "lucide-react";
 import { HouseLogo } from "./brand";
 import { ageGroups } from "@/data/programs";
@@ -21,6 +24,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [openDrop, setOpenDrop] = React.useState<null | "workshops" | "camps">(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pathname = usePathname();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -52,7 +56,7 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8 md:py-4">
-        <Link to="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5">
           <HouseLogo className="h-9 w-9" />
           <span className="font-display text-xl font-extrabold tracking-tight text-brand-teal md:text-2xl">
             Hack House
@@ -60,7 +64,7 @@ export function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
-          <NavLink to="/">Home</NavLink>
+          <NavLink href="/" pathname={pathname}>Home</NavLink>
           <DropdownTrigger
             label="Workshops"
             onMouseEnter={() => open("workshops")}
@@ -80,8 +84,7 @@ export function Navbar() {
                   return (
                     <Link
                       key={l.id}
-                      to="/workshops/$ageGroup"
-                      params={{ ageGroup: l.id }}
+                      href={`/workshops/${l.id}`}
                       onClick={() => setOpenDrop(null)}
                       className="group flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-brand-mint"
                     >
@@ -99,7 +102,7 @@ export function Navbar() {
                 })}
               </div>
               <Link
-                to="/workshops"
+                href="/workshops"
                 onClick={() => setOpenDrop(null)}
                 className="mt-3 block rounded-xl bg-brand-mint px-3 py-2 text-center text-sm font-bold text-primary hover:bg-primary/15"
               >
@@ -127,7 +130,7 @@ export function Navbar() {
                   return (
                     <Link
                       key={l.id}
-                      to="/summer-camp"
+                      href="/summer-camp"
                       onClick={() => setOpenDrop(null)}
                       className="group flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-brand-mint"
                     >
@@ -147,12 +150,12 @@ export function Navbar() {
             </Dropdown>
           </DropdownTrigger>
 
-          <NavLink to="/about">About Us</NavLink>
+          <NavLink href="/about" pathname={pathname}>About Us</NavLink>
         </nav>
 
         <div className="flex items-center gap-2">
           <Link
-            to="/register"
+            href="/register"
             className="hidden items-center gap-1.5 rounded-full bg-brand-orange px-5 py-2.5 font-display text-sm font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.03] md:inline-flex"
           >
             Register Now <Sparkles className="h-4 w-4" />
@@ -173,13 +176,14 @@ export function Navbar() {
   );
 }
 
-function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
+function NavLink({ href, pathname, children }: { href: string; pathname: string; children: React.ReactNode }) {
+  const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
   return (
     <Link
-      to={to}
-      activeOptions={{ exact: true }}
-      activeProps={{ className: "text-primary after:scale-x-100" }}
-      className="group relative px-3 py-2 font-display text-sm font-bold text-brand-teal transition-colors hover:text-primary after:absolute after:bottom-1 after:left-3 after:h-0.5 after:w-[calc(100%-1.5rem)] after:origin-left after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100"
+      href={href}
+      className={`group relative px-3 py-2 font-display text-sm font-bold transition-colors hover:text-primary after:absolute after:bottom-1 after:left-3 after:h-0.5 after:w-[calc(100%-1.5rem)] after:origin-left after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100 ${
+        isActive ? "text-primary after:scale-x-100" : "text-brand-teal"
+      }`}
     >
       {children}
     </Link>
@@ -275,7 +279,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         </div>
         <nav className="flex-1 overflow-y-auto px-3 pb-4">
           <Link
-            to="/"
+            href="/"
             onClick={onClose}
             className="block rounded-2xl px-4 py-3 font-display text-base font-bold text-brand-teal hover:bg-brand-mint"
           >
@@ -291,8 +295,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               return (
                 <Link
                   key={l.id}
-                  to="/workshops/$ageGroup"
-                  params={{ ageGroup: l.id }}
+                  href={`/workshops/${l.id}`}
                   onClick={onClose}
                   className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-teal hover:bg-brand-mint"
                 >
@@ -302,7 +305,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               );
             })}
             <Link
-              to="/workshops"
+              href="/workshops"
               onClick={onClose}
               className="block rounded-xl px-3 py-2.5 text-sm font-bold text-primary hover:bg-brand-mint"
             >
@@ -319,7 +322,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               return (
                 <Link
                   key={l.id}
-                  to="/summer-camp"
+                  href="/summer-camp"
                   onClick={onClose}
                   className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-teal hover:bg-brand-mint"
                 >
@@ -330,7 +333,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             })}
           </MobileAccordion>
           <Link
-            to="/about"
+            href="/about"
             onClick={onClose}
             className="block rounded-2xl px-4 py-3 font-display text-base font-bold text-brand-teal hover:bg-brand-mint"
           >
@@ -339,7 +342,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         </nav>
         <div className="border-t border-brand-mint p-4">
           <Link
-            to="/register"
+            href="/register"
             onClick={onClose}
             className="flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange"
           >

@@ -1,49 +1,13 @@
+"use client";
+
 import * as React from "react";
-import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { ageGroups, categories, programs, type AgeGroupId, type CategoryId } from "@/data/programs";
 import { ProgramCard } from "@/components/program-card";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Blob, WaveDivider } from "@/components/brand";
 
-export const Route = createFileRoute("/workshops/$ageGroup")({
-  head: ({ params }) => {
-    const ag = ageGroups[params.ageGroup as AgeGroupId];
-    const title = ag ? `${ag.name} (${ag.range}) — Workshops` : "Workshops";
-    return {
-      meta: [
-        { title: `${title} · The Hack House` },
-        {
-          name: "description",
-          content: ag
-            ? `${ag.name} workshops for ${ag.range}. ${ag.tagline}. Browse arts, cooking, science, sports, drama, and music programs at The Hack House.`
-            : "Workshops at The Hack House.",
-        },
-        { property: "og:title", content: `${title} · The Hack House` },
-        {
-          property: "og:description",
-          content: ag ? `${ag.tagline} — workshops designed for ${ag.range}.` : "Workshops at The Hack House.",
-        },
-      ],
-    };
-  },
-  loader: ({ params }) => {
-    if (!ageGroups[params.ageGroup as AgeGroupId]) throw notFound();
-    return {};
-  },
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-xl px-6 py-24 text-center">
-      <div className="text-5xl">🤔</div>
-      <h1 className="mt-3 font-display text-3xl font-extrabold text-brand-teal">Age group not found</h1>
-      <Link to="/workshops" className="mt-5 inline-block font-display font-bold text-primary">
-        ← Back to all workshops
-      </Link>
-    </div>
-  ),
-  component: AgeGroupPage,
-});
-
-function AgeGroupPage() {
-  const { ageGroup } = Route.useParams();
+export default function AgeGroupPageClient({ ageGroup }: { ageGroup: string }) {
   const ag = ageGroups[ageGroup as AgeGroupId];
   const [filter, setFilter] = React.useState<CategoryId | "all">("all");
 
@@ -58,8 +22,8 @@ function AgeGroupPage() {
         <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-10 md:px-8 md:pb-24 md:pt-14">
           <Breadcrumbs
             items={[
-              { label: "Home", to: "/" },
-              { label: "Workshops", to: "/workshops" },
+              { label: "Home", href: "/" },
+              { label: "Workshops", href: "/workshops" },
               { label: ag.range },
             ]}
           />
@@ -122,7 +86,7 @@ function EmptyState() {
       <div className="text-6xl">🌱</div>
       <h3 className="mt-4 font-display text-2xl font-extrabold text-brand-teal">Coming soon!</h3>
       <p className="mt-2 text-text-soft">
-        We're cooking up new programs in this category. Check back soon — or send us a WhatsApp to be notified first.
+        We&apos;re cooking up new programs in this category. Check back soon — or send us a WhatsApp to be notified first.
       </p>
       <a
         href="https://wa.me/15555555555"

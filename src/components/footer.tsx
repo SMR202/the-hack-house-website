@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import { Instagram, Facebook, MessageCircle } from "lucide-react";
 import { HouseLogo } from "./brand";
 
@@ -30,19 +30,19 @@ export function Footer() {
             </div>
           </div>
           <FooterCol title="Quick Links">
-            <FLink to="/">Home</FLink>
-            <FLink to="/about">About Us</FLink>
-            <FLink to="/register">Register</FLink>
+            <FLink href="/">Home</FLink>
+            <FLink href="/about">About Us</FLink>
+            <FLink href="/register">Register</FLink>
           </FooterCol>
           <FooterCol title="Workshops">
-            <FLink to="/workshops">All workshops</FLink>
-            <FLink to="/workshops/$ageGroup" params={{ ageGroup: "ages-6-9" }}>Little Explorers</FLink>
-            <FLink to="/workshops/$ageGroup" params={{ ageGroup: "ages-10-13" }}>Junior Creators</FLink>
-            <FLink to="/workshops/$ageGroup" params={{ ageGroup: "ages-14-plus" }}>Teen Makers</FLink>
+            <FLink href="/workshops">All workshops</FLink>
+            <FLink href="/workshops/ages-6-9">Little Explorers</FLink>
+            <FLink href="/workshops/ages-10-13">Junior Creators</FLink>
+            <FLink href="/workshops/ages-14-plus">Teen Makers</FLink>
           </FooterCol>
           <FooterCol title="Summer Camp">
-            <FLink to="/summer-camp">All camps</FLink>
-            <FLink to="/about">Our team</FLink>
+            <FLink href="/summer-camp">All camps</FLink>
+            <FLink href="/about">Our team</FLink>
           </FooterCol>
         </div>
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/60 md:flex-row md:items-center">
@@ -75,11 +75,10 @@ function FooterCol({ title, children }: { title: string; children: React.ReactNo
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function FLink({ to, params, children }: { to: any; params?: any; children: React.ReactNode }) {
+function FLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link to={to} params={params} className="transition-colors hover:text-white">
+      <Link href={href} className="transition-colors hover:text-white">
         {children}
       </Link>
     </li>

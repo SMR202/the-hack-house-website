@@ -1,30 +1,11 @@
+"use client";
+
 import * as React from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { ageGroups, programs, getProgramById, type AgeGroupId } from "@/data/programs";
 import { MessageCircle, ArrowRight, Phone, Mail, User, Heart, Info } from "lucide-react";
 import { Blob } from "@/components/brand";
-
-interface RegisterSearch {
-  program?: string;
-}
-
-export const Route = createFileRoute("/register")({
-  head: () => ({
-    meta: [
-      { title: "Register Your Child · The Hack House" },
-      {
-        name: "description",
-        content: "Quick and easy registration for Hack House workshops and summer camps. Takes under 2 minutes.",
-      },
-      { property: "og:title", content: "Register Your Child · The Hack House" },
-      { property: "og:description", content: "Grab your spot before it fills up!" },
-    ],
-  }),
-  validateSearch: (search): RegisterSearch => ({
-    program: typeof search.program === "string" ? search.program : undefined,
-  }),
-  component: RegisterPage,
-});
 
 interface FormState {
   childName: string;
@@ -40,9 +21,10 @@ interface FormState {
   notes: string;
 }
 
-function RegisterPage() {
-  const { program: programParam } = Route.useSearch();
-  const navigate = useNavigate();
+export default function RegisterPageClient() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const programParam = searchParams.get("program") ?? undefined;
 
   const preselected = programParam ? getProgramById(programParam) : undefined;
 
@@ -91,15 +73,12 @@ function RegisterPage() {
       return;
     }
     const program = getProgramById(form.programId);
-    navigate({
-      to: "/register/success",
-      search: {
-        child: form.childName,
-        program: program?.title ?? "",
-        dates: program?.dates ?? "",
-        whatsapp: form.whatsapp,
-      },
-    });
+    const params = new URLSearchParams();
+    if (form.childName) params.set("child", form.childName);
+    if (program?.title) params.set("program", program.title);
+    if (program?.dates) params.set("dates", program.dates);
+    if (form.whatsapp) params.set("whatsapp", form.whatsapp);
+    router.push(`/register/success?${params.toString()}`);
   };
 
   return (
@@ -298,12 +277,12 @@ function RegisterPage() {
             </button>
             <p className="flex items-center justify-center gap-2 text-center text-xs text-text-soft">
               <MessageCircle className="h-4 w-4 text-[#25D366]" />
-              After submitting, we'll send payment instructions to your WhatsApp number.
+              After submitting, we&apos;ll send payment instructions to your WhatsApp number.
             </p>
 
             <p className="text-center text-xs text-text-soft">
               Prefer to chat first?{" "}
-              <Link to="/" className="font-bold text-primary hover:underline">
+              <Link href="/" className="font-bold text-primary hover:underline">
                 Back to home
               </Link>
             </p>

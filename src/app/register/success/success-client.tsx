@@ -1,32 +1,11 @@
+"use client";
+
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Check, Calendar, MessageCircle, ArrowRight, User } from "lucide-react";
 import { programs } from "@/data/programs";
 import { ProgramCard } from "@/components/program-card";
-
-interface SuccessSearch {
-  child?: string;
-  program?: string;
-  dates?: string;
-  whatsapp?: string;
-}
-
-export const Route = createFileRoute("/register/success")({
-  head: () => ({
-    meta: [
-      { title: "You're All Set! · The Hack House" },
-      { name: "description", content: "Registration received. Complete your payment to confirm your spot." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
-  validateSearch: (s): SuccessSearch => ({
-    child: typeof s.child === "string" ? s.child : undefined,
-    program: typeof s.program === "string" ? s.program : undefined,
-    dates: typeof s.dates === "string" ? s.dates : undefined,
-    whatsapp: typeof s.whatsapp === "string" ? s.whatsapp : undefined,
-  }),
-  component: SuccessPage,
-});
 
 const confettiBits = Array.from({ length: 32 }).map((_, i) => ({
   id: i,
@@ -39,8 +18,13 @@ const confettiBits = Array.from({ length: 32 }).map((_, i) => ({
   size: 6 + Math.random() * 8,
 }));
 
-function SuccessPage() {
-  const { child, program, dates, whatsapp } = Route.useSearch();
+export default function SuccessPageClient() {
+  const searchParams = useSearchParams();
+  const child = searchParams.get("child") ?? undefined;
+  const program = searchParams.get("program") ?? undefined;
+  const dates = searchParams.get("dates") ?? undefined;
+  const whatsapp = searchParams.get("whatsapp") ?? undefined;
+
   const suggested = programs.filter((p) => p.title !== program).slice(0, 3);
 
   return (
@@ -82,10 +66,10 @@ function SuccessPage() {
         </div>
 
         <h1 className="mt-6 font-display text-4xl font-black text-brand-teal md:text-5xl">
-          You're All Set! 🎉
+          You&apos;re All Set! 🎉
         </h1>
         <p className="mt-3 text-lg text-text-soft">
-          We've received {child ? `${child}'s` : "your"} registration.
+          We&apos;ve received {child ? `${child}'s` : "your"} registration.
         </p>
 
         {/* Summary card */}
@@ -127,7 +111,7 @@ function SuccessPage() {
           </a>
         </div>
 
-        <Link to="/" className="mt-8 inline-block font-display text-sm font-bold text-primary hover:underline">
+        <Link href="/" className="mt-8 inline-block font-display text-sm font-bold text-primary hover:underline">
           ← Back to home
         </Link>
       </div>

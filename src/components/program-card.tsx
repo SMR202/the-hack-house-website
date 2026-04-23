@@ -1,12 +1,11 @@
-import { Link } from "@tanstack/react-router";
+import Link from "next/link";
 import type { Program } from "@/data/programs";
 import { ArrowRight } from "lucide-react";
 
 export function ProgramCard({ program }: { program: Program }) {
   return (
     <Link
-      to="/programs/$programId"
-      params={{ programId: program.id }}
+      href={`/programs/${program.id}`}
       className="group block overflow-hidden rounded-3xl bg-card shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lift"
     >
       <div className="relative aspect-[4/3] overflow-hidden">

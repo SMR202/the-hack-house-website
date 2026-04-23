@@ -1,33 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+"use client";
+
+import * as React from "react";
 import { MessageCircle, MapPin, Mail, Phone } from "lucide-react";
 import { team, stats } from "@/data/programs";
 import { Blob, Squiggle, useCountUp, WaveDivider } from "@/components/brand";
 
-export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About · The Hack House" },
-      {
-        name: "description",
-        content:
-          "We're a community of educators, makers, and big kids on a mission to help every child find their spark. Meet the team behind The Hack House.",
-      },
-      { property: "og:title", content: "About · The Hack House" },
-      {
-        property: "og:description",
-        content: "Every child has a spark. We just give them the space to shine.",
-      },
-      {
-        property: "og:image",
-        content:
-          "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=80",
-      },
-    ],
-  }),
-  component: AboutPage,
-});
-
-function AboutPage() {
+export default function AboutPageClient() {
   return (
     <>
       <section className="relative h-[420px] overflow-hidden md:h-[500px]">
@@ -61,14 +39,14 @@ function AboutPage() {
             <div className="mt-6 space-y-4 text-text-soft leading-relaxed">
               <p>
                 The Hack House started in 2022, in a converted garage with three kids, two instructors, and one big idea:
-                kids learn best when they're having fun, taken seriously, and trusted to make a mess.
+                kids learn best when they&apos;re having fun, taken seriously, and trusted to make a mess.
               </p>
               <p>
                 Three years later we run weekly workshops, full-week summer camps, and host hundreds of children every
                 term. Our instructors are vetted, our group sizes are small, and our walls are covered in art.
               </p>
               <p>
-                We're not a school. We're not a daycare. We're the place your kid asks to come back to.
+                We&apos;re not a school. We&apos;re not a daycare. We&apos;re the place your kid asks to come back to.
               </p>
             </div>
           </div>
@@ -84,7 +62,7 @@ function AboutPage() {
       {/* Quote */}
       <section className="relative overflow-hidden bg-brand-mint py-20">
         <div className="mx-auto max-w-3xl px-6 text-center md:px-8">
-          <div className="font-display text-7xl leading-none text-primary md:text-8xl">"</div>
+          <div className="font-display text-7xl leading-none text-primary md:text-8xl">&quot;</div>
           <blockquote className="-mt-6 font-display text-2xl font-bold italic text-primary md:text-4xl">
             Every child has a spark. We just give them the space to shine.
           </blockquote>

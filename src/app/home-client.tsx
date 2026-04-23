@@ -1,5 +1,7 @@
+"use client";
+
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import Link from "next/link";
 import {
   ArrowRight, Sparkles, Palette, ChefHat, FlaskConical, Trophy, Drama, Music,
   Search, FileText, MessageCircle, Star, Quote, Play,
@@ -8,34 +10,10 @@ import { programs, testimonials, categories } from "@/data/programs";
 import { ProgramCard } from "@/components/program-card";
 import { Squiggle, Blob, WaveDivider } from "@/components/brand";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "The Hack House — A Place to Explore, Create & Grow" },
-      {
-        name: "description",
-        content:
-          "Workshops & summer camps for kids aged 5–14. Arts, cooking, science, sports, drama, music — find their spark at The Hack House.",
-      },
-      { property: "og:title", content: "The Hack House — A Place to Explore, Create & Grow" },
-      {
-        property: "og:description",
-        content: "Workshops & summer camps packed with creativity, adventure, and fun.",
-      },
-      {
-        property: "og:image",
-        content:
-          "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=80",
-      },
-    ],
-  }),
-  component: HomePage,
-});
-
 const featuredIds = ["watercolor-wonders", "tiny-chefs", "stage-stars"];
 const featured = featuredIds.map((id) => programs.find((p) => p.id === id)!).filter(Boolean);
 
-function HomePage() {
+export default function HomePageClient() {
   return (
     <>
       <Hero />
@@ -124,7 +102,7 @@ function Hero() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              to="/workshops"
+              href="/workshops"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.03]"
             >
               Browse Programs <ArrowRight className="h-5 w-5" />
@@ -180,7 +158,7 @@ function Hero() {
                   <p className="mt-1 text-sm text-text-soft">{s.subtitle}</p>
                   {isTop && (
                     <Link
-                      to="/workshops"
+                      href="/workshops"
                       className="mt-3 inline-flex items-center gap-1 font-display text-sm font-bold text-primary"
                     >
                       Explore <ArrowRight className="h-4 w-4" />
@@ -216,7 +194,7 @@ function FeaturedPrograms() {
       <Blob className="-right-20 top-20 h-72 w-72" color="var(--color-brand-orange)" opacity={0.08} />
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-primary">What's On</p>
+          <p className="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-primary">What&apos;s On</p>
           <h2 className="mt-2 inline-block font-display text-4xl font-black text-brand-teal md:text-5xl">
             Featured Programs <span className="ml-1">🌈</span>
           </h2>
@@ -230,7 +208,7 @@ function FeaturedPrograms() {
         </div>
         <div className="mt-10 text-center">
           <Link
-            to="/workshops"
+            href="/workshops"
             className="inline-flex items-center gap-1 font-display text-base font-extrabold text-brand-orange hover:underline underline-offset-4"
           >
             See All Programs <ArrowRight className="h-5 w-5" />
@@ -268,7 +246,7 @@ function ActivityCategoriesStrip() {
             return (
               <Link
                 key={c.id}
-                to="/workshops"
+                href="/workshops"
                 className="group flex flex-col items-center gap-3 rounded-3xl bg-white p-5 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-mint text-primary transition-transform group-hover:scale-110">
@@ -300,7 +278,7 @@ function HowItWorks() {
           <h2 className="font-display text-4xl font-black text-brand-teal md:text-5xl">
             Getting Started is Simple <span>🎯</span>
           </h2>
-          <p className="mt-3 text-text-soft">From "what's a Hack House?" to "see you Saturday!" in three steps.</p>
+          <p className="mt-3 text-text-soft">From &quot;what&apos;s a Hack House?&quot; to &quot;see you Saturday!&quot; in three steps.</p>
         </div>
 
         <div className="relative mt-16">
@@ -341,7 +319,7 @@ function HowItWorks() {
 
         <div className="mt-12 text-center">
           <Link
-            to="/workshops"
+            href="/workshops"
             className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.03]"
           >
             Start Exploring <ArrowRight className="h-5 w-5" />
@@ -372,7 +350,7 @@ function Testimonials() {
               className="snap-start shrink-0 w-[320px] sm:w-[380px] rounded-3xl bg-white p-7 shadow-soft"
             >
               <Quote className="h-9 w-9 text-primary/70" />
-              <p className="mt-3 text-base leading-relaxed text-brand-teal">"{t.quote}"</p>
+              <p className="mt-3 text-base leading-relaxed text-brand-teal">&quot;{t.quote}&quot;</p>
               <div className="mt-5 flex gap-0.5 text-brand-yellow">
                 {Array.from({ length: t.rating }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-current" />

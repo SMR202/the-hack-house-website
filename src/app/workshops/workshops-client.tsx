@@ -1,29 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { ArrowRight, Sparkles, Wrench } from "lucide-react";
 import { ageGroups, programs } from "@/data/programs";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Blob, WaveDivider } from "@/components/brand";
 
-export const Route = createFileRoute("/workshops")({
-  head: () => ({
-    meta: [
-      { title: "Workshops — The Hack House" },
-      {
-        name: "description",
-        content:
-          "Hands-on weekend workshops for kids aged 5–14. Arts, cooking, science, sports, drama, music. Choose your age group and dive in.",
-      },
-      { property: "og:title", content: "Workshops — The Hack House" },
-      {
-        property: "og:description",
-        content: "Hands-on sessions where kids learn by doing.",
-      },
-    ],
-  }),
-  component: WorkshopsLanding,
-});
-
-function WorkshopsLanding() {
+export default function WorkshopsLandingClient() {
   const groups = (["ages-6-9", "ages-10-13", "ages-14-plus"] as const).map((id) => {
     const ag = ageGroups[id];
     const count = programs.filter((p) => p.ageGroup === id && p.type === "workshop").length;
@@ -42,7 +25,7 @@ function WorkshopsLanding() {
         <div className="absolute inset-0 bg-confetti-dark opacity-60" />
         <Blob className="-left-20 -top-20 h-80 w-80" color="white" opacity={0.12} />
         <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-12 md:px-8 md:pb-32 md:pt-16">
-          <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Workshops" }]} />
+          <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Workshops" }]} />
           <div className="max-w-2xl animate-[fade-up_0.6s_ease-out]">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide">
               <Wrench className="h-3.5 w-3.5" /> Workshops
@@ -73,8 +56,7 @@ function WorkshopsLanding() {
               return (
                 <Link
                   key={g.id}
-                  to="/workshops/$ageGroup"
-                  params={{ ageGroup: g.id }}
+                  href={`/workshops/${g.id}`}
                   className={`group relative overflow-hidden rounded-3xl ${s.bg} ${s.text} p-7 shadow-soft transition-all hover:-translate-y-2 hover:shadow-lift`}
                 >
                   <div
@@ -109,7 +91,7 @@ function WorkshopsLanding() {
               Not sure which is the right fit?
             </h3>
             <p className="mx-auto mt-2 max-w-xl text-text-soft">
-              Send us a quick WhatsApp message and we'll help you pick the perfect program for your child.
+              Send us a quick WhatsApp message and we&apos;ll help you pick the perfect program for your child.
             </p>
             <a
               href="https://wa.me/15555555555"
