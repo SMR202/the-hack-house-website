@@ -12,8 +12,8 @@ export async function Footer() {
   const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
 
   return (
-    <footer className="relative mt-20 overflow-hidden bg-brand-teal text-white">
-      <div className="absolute inset-0 bg-confetti-dark opacity-60" aria-hidden />
+    <footer className="relative mt-20 overflow-hidden bg-[oklch(0.96_0.02_195)] text-brand-teal">
+      <div className="absolute inset-0 bg-confetti-light opacity-60" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
@@ -21,7 +21,7 @@ export async function Footer() {
               <HouseLogo className="h-10 w-10" />
               <span className="font-display text-2xl font-extrabold">Hack House</span>
             </div>
-            <p className="mt-4 max-w-sm text-sm text-white/75">
+            <p className="mt-4 max-w-sm text-sm text-brand-teal/75">
               A place to explore, create & grow. Workshops and camps for kids aged 5–14, all year round.
             </p>
             <div className="mt-6 flex items-center gap-3">
@@ -53,7 +53,7 @@ export async function Footer() {
             <FLink href="/about">Our team</FLink>
           </FooterCol>
         </div>
-        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/60 md:flex-row md:items-center">
+        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-brand-teal/10 pt-6 text-xs text-brand-teal/60 md:flex-row md:items-center">
           <div>© {new Date().getFullYear()} The Hack House. Made with care for curious kids.</div>
           <div>123 Maple Lane · Hello@hackhouse.kids · +1 (555) 555-5555</div>
         </div>
@@ -67,7 +67,7 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
     <a
       href={href}
       aria-label={label}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-teal/10 text-brand-teal transition-colors hover:bg-brand-teal/20"
     >
       {children}
     </a>
@@ -77,8 +77,8 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
 function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="font-display text-sm font-extrabold uppercase tracking-wider text-white/90">{title}</h3>
-      <ul className="mt-4 space-y-2.5 text-sm text-white/70">{children}</ul>
+      <h3 className="font-display text-sm font-extrabold uppercase tracking-wider text-brand-teal/90">{title}</h3>
+      <ul className="mt-4 space-y-2.5 text-sm text-brand-teal/70">{children}</ul>
     </div>
   );
 }
@@ -86,7 +86,7 @@ function FooterCol({ title, children }: { title: string; children: React.ReactNo
 function FLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link href={href} className="transition-colors hover:text-white">
+      <Link href={href} className="transition-colors hover:text-brand-teal/90">
         {children}
       </Link>
     </li>

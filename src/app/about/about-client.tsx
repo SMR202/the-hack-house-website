@@ -16,12 +16,12 @@ export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamM
           alt="Kids enjoying a Hack House session"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-teal via-brand-teal/70 to-brand-teal/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.96_0.02_195)] via-[oklch(0.96_0.02_195)]/70 to-transparent" />
         <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-12 md:px-8 md:pb-16">
-          <h1 className="font-display text-5xl font-black text-white md:text-6xl">
+          <h1 className="font-display text-5xl font-black text-brand-teal md:text-6xl">
             About The Hack House <span className="inline-block animate-bounce-soft">🏠</span>
           </h1>
-          <p className="mt-3 max-w-xl text-lg text-white/90">
+          <p className="mt-3 max-w-xl text-lg text-brand-teal/90">
             A community of makers, coaches, and big kids on a mission to help every child find their spark.
           </p>
         </div>
@@ -99,8 +99,8 @@ export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamM
       </section>
 
       {/* Stats */}
-      <section className="relative overflow-hidden bg-brand-teal py-16 text-white">
-        <div className="absolute inset-0 bg-confetti-dark opacity-50" />
+      <section className="relative overflow-hidden bg-[oklch(0.96_0.02_195)] py-16 text-brand-teal">
+        <div className="absolute inset-0 bg-confetti-light opacity-50" />
         <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 md:grid-cols-4 md:px-8">
           {stats.map((s) => (
             <Stat key={s.label} {...s} />
@@ -151,7 +151,7 @@ function Stat({ value, suffix, label, icon }: { value: number; suffix: string; l
         <span ref={ref}>{v}</span>
         {suffix}
       </div>
-      <div className="mt-1 font-display text-sm font-bold text-white/80">{label}</div>
+      <div className="mt-1 font-display text-sm font-bold text-brand-teal/80">{label}</div>
     </div>
   );
 }

@@ -15,7 +15,7 @@ export function ProgramCard({ program }: { program: Program }) {
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
-        <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-brand-orange px-3 py-1 font-display text-xs font-extrabold text-white shadow-soft">
+        <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-brand-orange px-3 py-1 font-display text-xs font-extrabold text-brand-orange-foreground shadow-soft">
           {program.ageLabel}
         </span>
         <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 font-display text-xs font-extrabold text-brand-teal shadow-soft">

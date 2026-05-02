@@ -84,8 +84,8 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
   }, [paused, slides.length]);
 
   return (
-    <section className="relative overflow-hidden bg-brand-teal text-white">
-      <div className="absolute inset-0 bg-confetti-dark opacity-70" aria-hidden />
+    <section className="relative overflow-hidden bg-[oklch(0.96_0.02_195)] text-brand-teal">
+      <div className="absolute inset-0 bg-confetti-light opacity-70" aria-hidden />
       <Blob className="-left-32 top-0 h-[480px] w-[480px]" color="var(--color-primary)" opacity={0.18} />
       <Blob className="-right-40 bottom-0 h-[520px] w-[520px]" color="var(--color-brand-orange)" opacity={0.14} />
 
@@ -104,7 +104,7 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-24 pt-12 md:px-8 md:pb-32 md:pt-20 lg:grid-cols-2">
         {/* Left */}
         <div className="animate-[fade-up_0.7s_ease-out]">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide text-white shadow-glow-orange">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide text-brand-orange-foreground shadow-glow-orange">
             <Sparkles className="h-3.5 w-3.5" /> Summer 2025 Registrations Open!
           </span>
           <h1 className="mt-5 font-display text-5xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
@@ -113,24 +113,24 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
             <span className="text-primary">& Grow </span>
             <span className="inline-block animate-bounce-soft">🌟</span>
           </h1>
-          <p className="mt-6 max-w-md text-lg text-white/80">
+          <p className="mt-6 max-w-md text-lg text-brand-teal/80">
             Workshops & summer camps packed with creativity, adventure, and fun — for kids aged 5 to 14.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/workshops"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.03]"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.03]"
             >
               Browse Programs <ArrowRight className="h-5 w-5" />
             </Link>
             <a
               href="#how-it-works"
-              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/80 px-7 py-3.5 font-display text-base font-extrabold text-white transition-colors hover:bg-white hover:text-brand-teal"
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-brand-teal/80 px-7 py-3.5 font-display text-base font-extrabold text-brand-teal transition-colors hover:bg-brand-teal hover:text-white"
             >
               <Play className="h-4 w-4 fill-current" /> How It Works
             </a>
           </div>
-          <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/75">
+          <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-sm text-brand-teal/75">
             <span>✓ 500+ Happy Kids</span>
             <span>✓ All Activities</span>
             <span>✓ All Skill Levels</span>
@@ -336,7 +336,7 @@ function HowItWorks() {
         <div className="mt-12 text-center">
           <Link
             href="/workshops"
-            className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.03]"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.03]"
           >
             Start Exploring <ArrowRight className="h-5 w-5" />
           </Link>
@@ -353,7 +353,7 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   const duplicated = [...items, ...items];
 
   return (
-    <section className="relative overflow-hidden bg-[oklch(0.97_0.04_55)] py-20">
+    <section className="relative overflow-hidden bg-[oklch(0.98_0.02_55)] py-20">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-4xl font-black text-brand-teal md:text-5xl">

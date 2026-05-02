@@ -83,14 +83,14 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-orange/90 via-primary to-brand-teal py-16 text-white md:py-20">
-        <div className="absolute inset-0 bg-confetti-dark opacity-50" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-[oklch(0.96_0.04_55)] via-[oklch(0.96_0.02_188)] to-[oklch(0.96_0.02_195)] py-16 text-brand-teal md:py-20">
+        <div className="absolute inset-0 bg-confetti-light opacity-50" />
         <Blob className="-left-24 top-0 h-80 w-80" color="white" opacity={0.15} />
         <div className="relative mx-auto max-w-3xl px-6 text-center md:px-8">
           <h1 className="font-display text-4xl font-black md:text-5xl">
             Register Your Child <span className="inline-block animate-bounce-soft">📝</span>
           </h1>
-          <p className="mt-3 text-lg text-white/90">Grab your spot before it fills up!</p>
+          <p className="mt-3 text-lg text-brand-teal/90">Grab your spot before it fills up!</p>
         </div>
       </section>
 
@@ -269,7 +269,7 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-4 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.01]"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-4 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.01]"
             >
               Submit Registration <ArrowRight className="h-5 w-5" />
             </button>

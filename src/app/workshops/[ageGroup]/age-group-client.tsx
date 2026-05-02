@@ -32,8 +32,8 @@ export default function AgeGroupPageClient({ ageGroup: ag, programs, categories:
 
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary to-brand-teal text-white">
-        <div className="absolute inset-0 bg-confetti-dark opacity-60" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-[oklch(0.96_0.02_188)] to-[oklch(0.96_0.02_195)] text-brand-teal">
+        <div className="absolute inset-0 bg-confetti-light opacity-60" />
         <Blob className="-right-20 top-0 h-80 w-80" color="var(--color-brand-orange)" opacity={0.18} />
         <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-10 md:px-8 md:pb-24 md:pt-14">
           <Breadcrumbs
@@ -50,7 +50,7 @@ export default function AgeGroupPageClient({ ageGroup: ag, programs, categories:
             <h1 className="font-display text-5xl font-black md:text-6xl">
               {ag.name} <span className="inline-block">✨</span>
             </h1>
-            <p className="mt-2 max-w-xl text-lg text-white/85">{ag.tagline}.</p>
+            <p className="mt-2 max-w-xl text-lg text-brand-teal/85">{ag.tagline}.</p>
           </div>
         </div>
         <WaveDivider toColor="var(--color-background)" />

@@ -27,20 +27,20 @@ export default function SummerCampClient({ camps, ageGroups }: Props) {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-br from-brand-orange via-[oklch(0.7_0.13_60)] to-brand-teal text-white">
-        <div className="absolute inset-0 bg-confetti-dark opacity-50" />
+      <section className="relative overflow-hidden bg-gradient-to-br from-[oklch(0.96_0.04_55)] via-[oklch(0.96_0.02_120)] to-[oklch(0.96_0.02_195)] text-brand-teal">
+        <div className="absolute inset-0 bg-confetti-light opacity-50" />
         <Blob className="-left-24 -top-12 h-80 w-80" color="white" opacity={0.18} />
         <Blob className="-right-32 bottom-0 h-96 w-96" color="var(--color-brand-yellow)" opacity={0.2} />
         <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-10 md:px-8 md:pb-32 md:pt-16">
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Summer Camp" }]} />
           <div className="max-w-2xl animate-[fade-up_0.6s_ease-out]">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-orange/20 px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide">
               <Sun className="h-3.5 w-3.5" /> Summer 2025
             </span>
             <h1 className="mt-4 font-display text-5xl font-black leading-tight md:text-6xl">
               Summer Camp <span className="inline-block animate-bounce-soft">☀️</span>
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-white/90">
+            <p className="mt-4 max-w-xl text-lg text-brand-teal/90">
               The best summer your child has ever had. Day camps and overnight adventures, all summer long.
             </p>
           </div>

@@ -161,7 +161,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/register"
-            className="hidden items-center gap-1.5 rounded-full bg-brand-orange px-5 py-2.5 font-display text-sm font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.03] md:inline-flex"
+            className="hidden items-center gap-1.5 rounded-full bg-brand-orange px-5 py-2.5 font-display text-sm font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.03] md:inline-flex"
           >
             Register Now <Sparkles className="h-4 w-4" />
           </Link>
@@ -349,7 +349,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           <Link
             href="/register"
             onClick={onClose}
-            className="flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange"
+            className="flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3.5 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange"
           >
             Register Now <Sparkles className="h-5 w-5" />
           </Link>
