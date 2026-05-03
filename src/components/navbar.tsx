@@ -64,7 +64,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2.5">
           <HouseLogo className="h-9 w-9" />
           <span className="font-display text-xl font-extrabold tracking-tight text-brand-teal md:text-2xl">
-            Hack House
+            The Hack House
           </span>
         </Link>
 
