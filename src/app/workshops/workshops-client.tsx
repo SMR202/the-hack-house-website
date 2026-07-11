@@ -15,7 +15,7 @@ interface Props {
 export default function WorkshopsLandingClient({ programs, ageGroups, whatsapp }: Props) {
   const groups = (["ages-6-9", "ages-10-13", "ages-14-plus"] as const).map((id) => {
     const ag = ageGroups.find((g) => g.key === id);
-    const count = programs.filter((p) => p.ageGroup === id && p.type === "workshop").length;
+    const count = programs.filter((p) => p.ageGroup === id && p.type === "program").length;
     return {
       id,
       name: ag?.name ?? id,
@@ -40,16 +40,16 @@ export default function WorkshopsLandingClient({ programs, ageGroups, whatsapp }
         <div className="absolute inset-0 bg-confetti-light opacity-60" />
         <Blob className="-left-20 -top-20 h-80 w-80" color="white" opacity={0.12} />
         <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-12 md:px-8 md:pb-32 md:pt-16">
-          <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Workshops" }]} />
+          <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Programs" }]} />
           <div className="max-w-2xl animate-[fade-up_0.6s_ease-out]">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-teal/10 px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide">
-              <Wrench className="h-3.5 w-3.5" /> Workshops
+              <Wrench className="h-3.5 w-3.5" /> Haven Autism
             </span>
             <h1 className="mt-4 font-display text-5xl font-black leading-tight md:text-6xl">
-              Workshops <span className="inline-block animate-bounce-soft">🛠️</span>
+              Programs <span className="inline-block animate-bounce-soft">💙</span>
             </h1>
             <p className="mt-4 max-w-xl text-lg text-brand-teal/85">
-              Hands-on sessions where kids learn by doing. Pick the right age group below to find their next favourite thing.
+              Haven Autism programs designed around structure, care, communication, and confidence. Pick the right age group below to start.
             </p>
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function WorkshopsLandingClient({ programs, ageGroups, whatsapp }
               return (
                 <Link
                   key={g.id}
-                  href={`/workshops/${g.id}`}
+                  href={`/programs/age/${g.id}`}
                   className={`group relative overflow-hidden rounded-3xl ${s.bg} ${s.text} p-7 shadow-soft transition-all hover:-translate-y-2 hover:shadow-lift`}
                 >
                   <div

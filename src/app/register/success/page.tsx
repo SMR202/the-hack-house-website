@@ -7,7 +7,7 @@ import SuccessPageClient from "./success-client";
 
 export const metadata: Metadata = {
   title: "You're All Set! · The Hack House",
-  description: "Registration received. Complete your payment to confirm your spot.",
+  description: "Your request was received. The Hack House team will follow up on WhatsApp.",
   robots: { index: false },
 };
 

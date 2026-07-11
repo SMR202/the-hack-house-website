@@ -1,64 +1,10 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { sanityFetch } from "@/sanity/lib/client";
-import {
-  AGE_GROUP_BY_KEY_QUERY,
-  PROGRAMS_BY_AGE_AND_TYPE_QUERY,
-  ALL_AGE_GROUP_KEYS_QUERY,
-  SITE_SETTINGS_QUERY,
-} from "@/sanity/lib/queries";
-import type { AgeGroup, Program, SiteSettings } from "@/types/sanity";
-import AgeGroupPageClient from "./age-group-client";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: Promise<{ ageGroup: string }>;
 }
 
-export async function generateStaticParams() {
-  const keys = await sanityFetch<{ ageGroup: string }[]>({
-    query: ALL_AGE_GROUP_KEYS_QUERY,
-    revalidate: 3600,
-  });
-  return keys ?? [];
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export default async function WorkshopAgeGroupRedirectPage({ params }: Props) {
   const { ageGroup } = await params;
-  const ag = await sanityFetch<AgeGroup | null>({
-    query: AGE_GROUP_BY_KEY_QUERY,
-    params: { key: ageGroup },
-  });
-  if (!ag) return { title: "Workshops · The Hack House" };
-  const title = `${ag.name} (${ag.range}) — Workshops`;
-  return {
-    title: `${title} · The Hack House`,
-    description: `${ag.name} workshops for ${ag.range}. ${ag.tagline}. Browse arts, cooking, science, sports, drama, and music programs at The Hack House.`,
-    openGraph: {
-      title: `${title} · The Hack House`,
-      description: `${ag.tagline} — workshops designed for ${ag.range}.`,
-    },
-  };
-}
-
-export default async function AgeGroupPage({ params }: Props) {
-  const { ageGroup } = await params;
-
-  const [ag, programs, settings] = await Promise.all([
-    sanityFetch<AgeGroup | null>({ query: AGE_GROUP_BY_KEY_QUERY, params: { key: ageGroup } }),
-    sanityFetch<Program[]>({ query: PROGRAMS_BY_AGE_AND_TYPE_QUERY, params: { ageGroup, type: "workshop" } }),
-    sanityFetch<SiteSettings | null>({ query: SITE_SETTINGS_QUERY }),
-  ]);
-
-  if (!ag) {
-    notFound();
-  }
-
-  return (
-    <AgeGroupPageClient
-      ageGroup={ag}
-      programs={programs}
-      categories={settings?.categories ?? []}
-      whatsapp={settings?.whatsappNumber}
-    />
-  );
+  redirect(`/programs/age/${ageGroup}`);
 }

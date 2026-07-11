@@ -22,7 +22,7 @@ export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamM
             About The Hack House <span className="inline-block animate-bounce-soft">🏠</span>
           </h1>
           <p className="mt-3 max-w-xl text-lg text-brand-teal/90">
-            A community of makers, coaches, and big kids on a mission to help every child find their spark.
+            The parent company behind Haven Autism and Haven Montessori, built to help every child grow with care.
           </p>
         </div>
         <WaveDivider toColor="var(--color-background)" />
@@ -40,15 +40,15 @@ export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamM
             <Squiggle className="mt-1 h-3 w-44" />
             <div className="mt-6 space-y-4 text-text-soft leading-relaxed">
               <p>
-                The Hack House started in 2022, in a converted garage with three kids, two instructors, and one big idea:
-                kids learn best when they&apos;re having fun, taken seriously, and trusted to make a mess.
+                The Hack House brings Haven Autism and Haven Montessori under one parent company, with one big idea:
+                children grow best when they are understood, supported, and given room to move at their own pace.
               </p>
               <p>
-                Three years later we run weekly workshops, full-week summer camps, and host hundreds of children every
-                term. Our instructors are vetted, our group sizes are small, and our walls are covered in art.
+                Today we run structured programs, Montessori classrooms, and family support for children across different
+                learning needs. Our instructors are vetted, our group sizes are small, and our routines are built with care.
               </p>
               <p>
-                We&apos;re not a school. We&apos;re not a daycare. We&apos;re the place your kid asks to come back to.
+                We&apos;re more than a center name. We&apos;re the home behind the Haven programs families come back to.
               </p>
             </div>
           </div>

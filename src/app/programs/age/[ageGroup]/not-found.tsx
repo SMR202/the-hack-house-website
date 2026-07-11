@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function WorkshopAgeGroupNotFound() {
+export default function ProgramAgeGroupNotFound() {
   return (
     <div className="mx-auto max-w-xl px-6 py-24 text-center">
       <div className="text-5xl">🤔</div>

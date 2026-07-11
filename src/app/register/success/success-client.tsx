@@ -69,20 +69,20 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
           You&apos;re All Set! 🎉
         </h1>
         <p className="mt-3 text-lg text-text-soft">
-          We&apos;ve received {child ? `${child}'s` : "your"} registration.
+          We&apos;ve received {child ? `the request for ${child}` : "your request"}.
         </p>
 
         {/* Summary card */}
         <div className="mt-10 rounded-3xl bg-white p-6 text-left shadow-lift md:p-8">
           <div className="font-display text-xs font-extrabold uppercase tracking-wider text-primary">
-            Your registration
+            Your request
           </div>
           <div className="mt-3 grid gap-3">
             {child && (
-              <Row icon={<User className="h-4 w-4" />} label="Child" value={child} />
+              <Row icon={<User className="h-4 w-4" />} label="Name" value={child} />
             )}
             {program && (
-              <Row icon={<Check className="h-4 w-4" />} label="Program" value={program} />
+              <Row icon={<Check className="h-4 w-4" />} label="Offering" value={program} />
             )}
             {dates && (
               <Row icon={<Calendar className="h-4 w-4" />} label="Dates" value={dates} />
@@ -96,12 +96,12 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
         {/* Payment instructions */}
         <div className="mt-6 rounded-3xl bg-[#25D366]/10 p-6 text-left ring-2 ring-[#25D366]/30 md:p-8">
           <h2 className="font-display text-xl font-extrabold text-brand-teal">
-            One Last Step — Complete Your Payment
+            One Last Step
           </h2>
           <ol className="mt-4 space-y-2.5 text-sm text-brand-teal">
-            <Step n={1}>Make your payment to <strong>Hack House · 1234-567-890</strong></Step>
-            <Step n={2}>Screenshot the confirmation</Step>
-            <Step n={3}>Send it to our WhatsApp to confirm your spot</Step>
+            <Step n={1}>Our team will review your request</Step>
+            <Step n={2}>We&apos;ll confirm availability and pricing on WhatsApp</Step>
+            <Step n={3}>Send any requested payment confirmation there to lock your booking</Step>
           </ol>
           <a
             href="https://wa.me/15555555555"
@@ -118,7 +118,7 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
 
       <div className="mx-auto mt-16 max-w-7xl px-6 md:px-8">
         <h2 className="font-display text-2xl font-extrabold text-brand-teal text-center">
-          While you wait, check out more programs
+          While you wait, check out more offerings
         </h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {suggested.map((p) => (

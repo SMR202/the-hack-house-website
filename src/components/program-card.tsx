@@ -1,8 +1,11 @@
 import Link from "next/link";
 import type { Program } from "@/types/sanity";
 import { ArrowRight } from "lucide-react";
+import { getProgramSection } from "@/data/sections";
 
 export function ProgramCard({ program }: { program: Program }) {
+  const section = getProgramSection(program);
+
   return (
     <Link
       href={`/programs/${program.id}`}
@@ -21,14 +24,19 @@ export function ProgramCard({ program }: { program: Program }) {
         <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 font-display text-xs font-extrabold text-brand-teal shadow-soft">
           <span>{program.categoryEmoji}</span> {program.categoryLabel}
         </span>
-        {program.type === "camp" && program.campType && (
+        {section.id !== "haven-autism" && (
           <span className="absolute bottom-4 left-4 inline-flex items-center rounded-full bg-brand-yellow px-3 py-1 font-display text-xs font-extrabold text-brand-teal shadow-soft">
-            {program.campType}
+            {section.title}
           </span>
         )}
       </div>
       <div className="p-5">
         <h3 className="font-display text-xl font-extrabold text-brand-teal">{program.title}</h3>
+        {program.subsectionLabel && (
+          <p className="mt-1 font-display text-xs font-extrabold uppercase tracking-wider text-primary">
+            {program.subsectionLabel}
+          </p>
+        )}
         <p className="mt-1.5 line-clamp-2 text-sm text-text-soft">{program.shortDescription}</p>
         <div className="mt-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-xs">

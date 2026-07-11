@@ -11,6 +11,9 @@ export const ALL_PROGRAMS_QUERY = /* groq */ `
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")),
+    "subsectionLabel": coalesce(subsectionLabel, select(type in ["montessori", "camp"] => coalesce(campType, "Montessori"), "Haven Autism")),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -25,8 +28,47 @@ export const ALL_PROGRAMS_QUERY = /* groq */ `
     shortDescription,
     longDescription,
     whatKidsWillDo,
+    "highlights": coalesce(highlights, whatKidsWillDo),
     instructor,
-    type,
+    "type": select(type == "workshop" => "program", type == "camp" => "montessori", type),
+    campType,
+    featured,
+    order
+  }
+`;
+
+// Programs by the new five-section taxonomy.
+export const PROGRAMS_BY_SECTION_QUERY = /* groq */ `
+  *[
+    _type == "program" &&
+    coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")) == $section
+  ] | order(order asc, _createdAt asc) {
+    _id,
+    title,
+    "id": slug.current,
+    category,
+    categoryLabel,
+    categoryEmoji,
+    "section": coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")),
+    "subsectionLabel": coalesce(subsectionLabel, select(type in ["montessori", "camp"] => coalesce(campType, "Montessori"), "Haven Autism")),
+    "participantKind": coalesce(participantKind, "child"),
+    ageGroup,
+    ageLabel,
+    duration,
+    price,
+    spotsLeft,
+    totalSpots,
+    dates,
+    time,
+    location,
+    image,
+    gallery,
+    shortDescription,
+    longDescription,
+    whatKidsWillDo,
+    "highlights": coalesce(highlights, whatKidsWillDo),
+    instructor,
+    "type": select(type == "workshop" => "program", type == "camp" => "montessori", type),
     campType,
     featured,
     order
@@ -42,6 +84,9 @@ export const PROGRAM_BY_SLUG_QUERY = /* groq */ `
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")),
+    "subsectionLabel": coalesce(subsectionLabel, select(type in ["montessori", "camp"] => coalesce(campType, "Montessori"), "Haven Autism")),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -56,8 +101,9 @@ export const PROGRAM_BY_SLUG_QUERY = /* groq */ `
     shortDescription,
     longDescription,
     whatKidsWillDo,
+    "highlights": coalesce(highlights, whatKidsWillDo),
     instructor,
-    type,
+    "type": select(type == "workshop" => "program", type == "camp" => "montessori", type),
     campType,
     featured,
     order
@@ -73,6 +119,9 @@ export const FEATURED_PROGRAMS_QUERY = /* groq */ `
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")),
+    "subsectionLabel": coalesce(subsectionLabel, select(type in ["montessori", "camp"] => coalesce(campType, "Montessori"), "Haven Autism")),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -87,21 +136,32 @@ export const FEATURED_PROGRAMS_QUERY = /* groq */ `
     shortDescription,
     longDescription,
     whatKidsWillDo,
+    "highlights": coalesce(highlights, whatKidsWillDo),
     instructor,
-    type,
+    "type": select(type == "workshop" => "program", type == "camp" => "montessori", type),
     campType
   }
 `;
 
-// Programs by age group and type (for workshops/camps pages)
+// Programs by age group and type.
 export const PROGRAMS_BY_AGE_AND_TYPE_QUERY = /* groq */ `
-  *[_type == "program" && ageGroup == $ageGroup && type == $type] | order(order asc) {
+  *[
+    _type == "program" &&
+    ageGroup == $ageGroup &&
+    (
+      ($type == "program" && type in ["program", "workshop"]) ||
+      ($type == "montessori" && type in ["montessori", "camp"])
+    )
+  ] | order(order asc) {
     _id,
     title,
     "id": slug.current,
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")),
+    "subsectionLabel": coalesce(subsectionLabel, select(type in ["montessori", "camp"] => coalesce(campType, "Montessori"), "Haven Autism")),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -116,21 +176,29 @@ export const PROGRAMS_BY_AGE_AND_TYPE_QUERY = /* groq */ `
     shortDescription,
     longDescription,
     whatKidsWillDo,
+    "highlights": coalesce(highlights, whatKidsWillDo),
     instructor,
-    type,
+    "type": select(type == "workshop" => "program", type == "camp" => "montessori", type),
     campType
   }
 `;
 
-// All workshops (type == "workshop")
-export const ALL_WORKSHOPS_QUERY = /* groq */ `
-  *[_type == "program" && type == "workshop"] | order(order asc) {
+// All Haven Autism programs. Legacy "workshop" documents are included until content is migrated.
+export const ALL_CORE_PROGRAMS_QUERY = /* groq */ `
+  *[
+    _type == "program" &&
+    type in ["program", "workshop"] &&
+    coalesce(section, "haven-autism") == "haven-autism"
+  ] | order(order asc) {
     _id,
     title,
     "id": slug.current,
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, "haven-autism"),
+    "subsectionLabel": coalesce(subsectionLabel, "Haven Autism"),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -142,20 +210,33 @@ export const ALL_WORKSHOPS_QUERY = /* groq */ `
     location,
     image,
     shortDescription,
-    type,
+    "highlights": coalesce(highlights, whatKidsWillDo),
+    "type": select(type == "workshop" => "program", type),
     campType
   }
 `;
 
-// All camps (type == "camp")
-export const ALL_CAMPS_QUERY = /* groq */ `
-  *[_type == "program" && type == "camp"] | order(order asc) {
+// Backwards-compatible alias for older imports.
+export const ALL_WORKSHOPS_QUERY = ALL_CORE_PROGRAMS_QUERY;
+
+// All Haven Montessori entries. Legacy "camp" documents are included until content is migrated.
+export const ALL_MONTESSORI_QUERY = /* groq */ `
+  *[
+    _type == "program" &&
+    (
+      type in ["montessori", "camp"] ||
+      section == "haven-montessori"
+    )
+  ] | order(order asc) {
     _id,
     title,
     "id": slug.current,
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, "haven-montessori"),
+    "subsectionLabel": coalesce(subsectionLabel, coalesce(campType, "Montessori")),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -170,8 +251,9 @@ export const ALL_CAMPS_QUERY = /* groq */ `
     shortDescription,
     longDescription,
     whatKidsWillDo,
+    "highlights": coalesce(highlights, whatKidsWillDo),
     instructor,
-    type,
+    "type": select(type == "camp" => "montessori", type),
     campType
   }
 `;
@@ -185,6 +267,9 @@ export const RELATED_PROGRAMS_QUERY = /* groq */ `
     category,
     categoryLabel,
     categoryEmoji,
+    "section": coalesce(section, select(type in ["montessori", "camp"] => "haven-montessori", "haven-autism")),
+    "subsectionLabel": coalesce(subsectionLabel, select(type in ["montessori", "camp"] => coalesce(campType, "Montessori"), "Haven Autism")),
+    "participantKind": coalesce(participantKind, "child"),
     ageGroup,
     ageLabel,
     duration,
@@ -196,7 +281,8 @@ export const RELATED_PROGRAMS_QUERY = /* groq */ `
     location,
     image,
     shortDescription,
-    type,
+    "highlights": coalesce(highlights, whatKidsWillDo),
+    "type": select(type == "workshop" => "program", type == "camp" => "montessori", type),
     campType
   }
 `;

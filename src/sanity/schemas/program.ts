@@ -24,6 +24,12 @@ export const program = defineType({
       type: "string",
       options: {
         list: [
+          { title: "Autism Support", value: "autism" },
+          { title: "Montessori", value: "montessori" },
+          { title: "Early Learning", value: "early-learning" },
+          { title: "Therapy", value: "therapy" },
+          { title: "Life Skills", value: "life-skills" },
+          { title: "Parent Support", value: "parent-support" },
           { title: "Arts & Crafts", value: "arts" },
           { title: "Cooking", value: "cooking" },
           { title: "Science", value: "science" },
@@ -45,6 +51,42 @@ export const program = defineType({
       title: "Category Emoji",
       type: "string",
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "section",
+      title: "Client Section",
+      type: "string",
+      description: "Top-level website section this offering belongs to.",
+      options: {
+        list: [
+          { title: "Haven Autism", value: "haven-autism" },
+          { title: "Haven Montessori", value: "haven-montessori" },
+          { title: "Party Hall", value: "party-hall" },
+          { title: "Crash Courses for Adults", value: "crash-courses-adults" },
+          { title: "Crash Courses for Children", value: "crash-courses-children" },
+        ],
+      },
+    }),
+    defineField({
+      name: "subsectionLabel",
+      title: "Subsection Label",
+      type: "string",
+      description: 'Examples: "Day Care Monthly", "Hall + Catering", "Quran Course".',
+    }),
+    defineField({
+      name: "participantKind",
+      title: "Participant Kind",
+      type: "string",
+      options: {
+        list: [
+          { title: "Child", value: "child" },
+          { title: "Adult", value: "adult" },
+          { title: "Event", value: "event" },
+          { title: "Family", value: "family" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "child",
     }),
     defineField({
       name: "ageGroup",
@@ -147,6 +189,13 @@ export const program = defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
+      name: "highlights",
+      title: "Generic Highlights",
+      type: "array",
+      description: "Use for adult courses, events, daycare, and other offerings where child-specific wording does not fit.",
+      of: [{ type: "string" }],
+    }),
+    defineField({
       name: "instructor",
       title: "Instructor",
       type: "object",
@@ -163,8 +212,8 @@ export const program = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Workshop", value: "workshop" },
-          { title: "Camp", value: "camp" },
+          { title: "Haven Autism Program", value: "program" },
+          { title: "Haven Montessori", value: "montessori" },
         ],
         layout: "radio",
       },
@@ -172,15 +221,17 @@ export const program = defineType({
     }),
     defineField({
       name: "campType",
-      title: "Camp Type",
+      title: "Montessori Label",
       type: "string",
+      description: "Optional label for Montessori cards. Older labels can remain until content is migrated.",
       options: {
         list: [
-          { title: "Day Camp", value: "Day Camp" },
-          { title: "Residential", value: "Residential" },
+          { title: "Haven Montessori", value: "Haven Montessori" },
+          { title: "Early Years", value: "Early Years" },
+          { title: "Practical Life", value: "Practical Life" },
         ],
       },
-      hidden: ({ parent }) => parent?.type !== "camp",
+      hidden: ({ parent }) => parent?.type !== "montessori",
     }),
     defineField({
       name: "featured",

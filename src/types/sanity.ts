@@ -3,7 +3,26 @@
 /* ------------------------------------------------------------------ */
 
 export type AgeGroupId = "ages-6-9" | "ages-10-13" | "ages-14-plus";
-export type CategoryId = "arts" | "cooking" | "science" | "sports" | "drama" | "music";
+export type ProgramSectionId =
+  | "haven-autism"
+  | "haven-montessori"
+  | "party-hall"
+  | "crash-courses-adults"
+  | "crash-courses-children";
+export type ParticipantKind = "child" | "adult" | "event" | "family";
+export type CategoryId =
+  | "autism"
+  | "montessori"
+  | "early-learning"
+  | "therapy"
+  | "life-skills"
+  | "parent-support"
+  | "arts"
+  | "cooking"
+  | "science"
+  | "sports"
+  | "drama"
+  | "music";
 
 export interface Program {
   _id?: string;
@@ -12,6 +31,9 @@ export interface Program {
   category: CategoryId;
   categoryLabel: string;
   categoryEmoji: string;
+  section?: ProgramSectionId;
+  subsectionLabel?: string;
+  participantKind?: ParticipantKind;
   ageGroup: AgeGroupId;
   ageLabel: string;
   duration: string;
@@ -26,14 +48,15 @@ export interface Program {
   shortDescription: string;
   longDescription: string;
   whatKidsWillDo: string[];
+  highlights?: string[];
   instructor: {
     name: string;
     role: string;
     bio: string;
     photo: string;
   };
-  type: "workshop" | "camp";
-  campType?: "Day Camp" | "Residential";
+  type: "program" | "montessori";
+  campType?: "Haven Montessori" | "Early Years" | "Practical Life" | "Day Camp" | "Residential";
   featured?: boolean;
   order?: number;
 }

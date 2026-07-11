@@ -39,7 +39,7 @@ export default function AgeGroupPageClient({ ageGroup: ag, programs, categories:
           <Breadcrumbs
             items={[
               { label: "Home", href: "/" },
-              { label: "Workshops", href: "/workshops" },
+              { label: "Programs", href: "/programs" },
               { label: ag.range },
             ]}
           />

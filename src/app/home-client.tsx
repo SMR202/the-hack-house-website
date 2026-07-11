@@ -3,12 +3,12 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  ArrowRight, Sparkles, Palette, ChefHat, FlaskConical, Trophy, Drama, Music,
-  Search, FileText, MessageCircle, Star, Quote, Play,
+  ArrowRight, Sparkles, Search, FileText, MessageCircle, Quote, Play, Star,
 } from "lucide-react";
 import type { Program, Testimonial, CategoryItem, HeroSlide } from "@/types/sanity";
 import { ProgramCard } from "@/components/program-card";
 import { Squiggle, Blob, WaveDivider } from "@/components/brand";
+import { programSections } from "@/data/sections";
 
 interface HomePageClientProps {
   featured: Program[];
@@ -20,42 +20,32 @@ interface HomePageClientProps {
 const fallbackSlides: HeroSlide[] = [
   {
     image: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=80",
-    title: "Watercolor Wonders",
-    subtitle: "Saturdays · Ages 6–9",
-    badge: "🎨 Arts",
+    title: "Haven Autism",
+    subtitle: "Individualized support · Ages 5–14",
+    badge: "💙 Programs",
   },
   {
     image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80",
-    title: "Tiny Chefs Kitchen",
-    subtitle: "Sundays · Ages 6–9",
-    badge: "🍳 Cooking",
+    title: "Haven Montessori",
+    subtitle: "Prepared classrooms · Early years",
+    badge: "🌱 Montessori",
   },
   {
     image: "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=900&q=80",
-    title: "Stage Stars Drama",
-    subtitle: "Fridays · Ages 9–12",
-    badge: "🎭 Drama",
+    title: "Life Skills Lab",
+    subtitle: "Confidence, care, and daily independence",
+    badge: "✨ Skills",
   },
 ];
 
-const fallbackCategories: CategoryItem[] = [
-  { id: "arts", label: "Arts & Crafts", emoji: "🎨" },
-  { id: "cooking", label: "Cooking", emoji: "🍳" },
-  { id: "science", label: "Science", emoji: "🔬" },
-  { id: "sports", label: "Sports", emoji: "⚽" },
-  { id: "drama", label: "Drama", emoji: "🎭" },
-  { id: "music", label: "Music", emoji: "🎵" },
-];
-
-export default function HomePageClient({ featured, testimonials, categories, heroSlides }: HomePageClientProps) {
+export default function HomePageClient({ featured, testimonials, categories: _categories, heroSlides }: HomePageClientProps) {
   const slides = heroSlides.length > 0 ? heroSlides : fallbackSlides;
-  const cats = categories.length > 0 ? categories : fallbackCategories;
 
   return (
     <>
       <Hero slides={slides} />
+      <SectionsGrid />
       <FeaturedPrograms featured={featured} />
-      <ActivityCategoriesStrip categories={cats} />
       <HowItWorks />
       <Testimonials testimonials={testimonials} />
     </>
@@ -105,20 +95,20 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
         {/* Left */}
         <div className="animate-[fade-up_0.7s_ease-out]">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-orange px-4 py-1.5 font-display text-xs font-extrabold uppercase tracking-wide text-brand-orange-foreground shadow-glow-orange">
-            <Sparkles className="h-3.5 w-3.5" /> Summer 2025 Registrations Open!
+            <Sparkles className="h-3.5 w-3.5" /> Haven admissions open
           </span>
           <h1 className="mt-5 font-display text-5xl font-black leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
-            A Place to<br />
-            Explore, Create<br />
-            <span className="text-primary">& Grow </span>
+            The Parent Home<br />
+            for Haven Autism<br />
+            <span className="text-primary">& Montessori </span>
             <span className="inline-block animate-bounce-soft">🌟</span>
           </h1>
           <p className="mt-6 max-w-md text-lg text-brand-teal/80">
-            Workshops & summer camps packed with creativity, adventure, and fun — for kids aged 5 to 14.
+            The Hack House brings Haven Autism programs and Haven Montessori together under one caring parent company.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/workshops"
+              href="/programs"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.03]"
             >
               Browse Programs <ArrowRight className="h-5 w-5" />
@@ -174,7 +164,7 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
                   <p className="mt-1 text-sm text-text-soft">{s.subtitle}</p>
                   {isTop && (
                     <Link
-                      href="/workshops"
+                      href="/programs"
                       className="mt-3 inline-flex items-center gap-1 font-display text-sm font-bold text-primary"
                     >
                       Explore <ArrowRight className="h-4 w-4" />
@@ -215,7 +205,7 @@ function FeaturedPrograms({ featured }: { featured: Program[] }) {
             Featured Programs <span className="ml-1">🌈</span>
           </h2>
           <Squiggle className="mx-auto mt-1 h-3 w-44" />
-          <p className="mt-4 text-text-soft">A little something for every kind of kid.</p>
+          <p className="mt-4 text-text-soft">Haven Autism programs built around care, structure, and confidence.</p>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((p) => (
@@ -224,7 +214,7 @@ function FeaturedPrograms({ featured }: { featured: Program[] }) {
         </div>
         <div className="mt-10 text-center">
           <Link
-            href="/workshops"
+            href="/programs"
             className="inline-flex items-center gap-1 font-display text-base font-extrabold text-brand-orange hover:underline underline-offset-4"
           >
             See All Programs <ArrowRight className="h-5 w-5" />
@@ -235,40 +225,36 @@ function FeaturedPrograms({ featured }: { featured: Program[] }) {
   );
 }
 
-/* ---------------- CATEGORIES ---------------- */
+/* ---------------- SECTIONS ---------------- */
 
-const categoryIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  arts: Palette,
-  cooking: ChefHat,
-  science: FlaskConical,
-  sports: Trophy,
-  drama: Drama,
-  music: Music,
-};
-
-function ActivityCategoriesStrip({ categories }: { categories: CategoryItem[] }) {
+function SectionsGrid() {
   return (
     <section className="relative overflow-hidden bg-brand-mint py-20">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-4xl font-black text-brand-teal md:text-5xl">
-            Something for Every Kid <span>🎯</span>
+            Explore The Hack House <span>🎯</span>
           </h2>
-          <p className="mt-3 text-text-soft">Explore the full menu of Hack House activities.</p>
+          <p className="mt-3 text-text-soft">Five clear sections for programs, daycare, parties, and crash courses.</p>
         </div>
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {categories.filter((c) => c.id !== "all").map((c) => {
-            const Icon = categoryIcons[c.id];
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {programSections.map((section) => {
             return (
               <Link
-                key={c.id}
-                href="/workshops"
-                className="group flex flex-col items-center gap-3 rounded-3xl bg-white p-5 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
+                key={section.id}
+                href={section.href}
+                className="group flex min-h-[210px] flex-col rounded-3xl bg-white p-5 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-mint text-primary transition-transform group-hover:scale-110">
-                  {Icon && <Icon className="h-7 w-7" />}
+                <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${section.accent} text-2xl transition-transform group-hover:scale-110`}>
+                  {section.emoji}
                 </div>
-                <span className="font-display text-sm font-extrabold text-brand-teal">{c.label}</span>
+                <h3 className="mt-4 font-display text-xl font-extrabold leading-tight text-brand-teal">
+                  {section.title}
+                </h3>
+                <p className="mt-2 text-sm text-text-soft">{section.subtitle}</p>
+                <span className="mt-auto inline-flex items-center gap-1 pt-5 font-display text-sm font-bold text-primary">
+                  View section <ArrowRight className="h-4 w-4" />
+                </span>
               </Link>
             );
           })}
@@ -282,8 +268,8 @@ function ActivityCategoriesStrip({ categories }: { categories: CategoryItem[] })
 
 function HowItWorks() {
   const steps = [
-    { n: 1, icon: Search, emoji: "🔍", title: "Find a Program", desc: "Browse workshops and camps by age or activity." },
-    { n: 2, icon: FileText, emoji: "📝", title: "Fill the Form", desc: "Quick registration — takes under 2 minutes." },
+    { n: 1, icon: Search, emoji: "🔍", title: "Find a Program", desc: "Browse Haven Autism programs or the Montessori section." },
+    { n: 2, icon: FileText, emoji: "📝", title: "Fill the Form", desc: "Quick registration takes under 2 minutes." },
     { n: 3, icon: MessageCircle, emoji: "💸", title: "Pay on WhatsApp", desc: "Send your payment screenshot to confirm your spot." },
   ];
   return (
@@ -335,7 +321,7 @@ function HowItWorks() {
 
         <div className="mt-12 text-center">
           <Link
-            href="/workshops"
+            href="/programs"
             className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.03]"
           >
             Start Exploring <ArrowRight className="h-5 w-5" />

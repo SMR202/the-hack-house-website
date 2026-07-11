@@ -22,7 +22,7 @@ export async function Footer() {
               <span className="font-display text-2xl font-extrabold">Hack House</span>
             </div>
             <p className="mt-4 max-w-sm text-sm text-brand-teal/75">
-              A place to explore, create & grow. Workshops and camps for kids aged 5–14, all year round.
+              Parent company for Haven Autism and Haven Montessori, with child-centered programs for growing families.
             </p>
             <div className="mt-6 flex items-center gap-3">
               <a
@@ -42,14 +42,14 @@ export async function Footer() {
             <FLink href="/about">About Us</FLink>
             <FLink href="/register">Register</FLink>
           </FooterCol>
-          <FooterCol title="Workshops">
-            <FLink href="/workshops">All workshops</FLink>
-            <FLink href="/workshops/ages-6-9">Little Explorers</FLink>
-            <FLink href="/workshops/ages-10-13">Junior Creators</FLink>
-            <FLink href="/workshops/ages-14-plus">Teen Makers</FLink>
+          <FooterCol title="Programs">
+            <FLink href="/programs">All programs</FLink>
+            <FLink href="/programs/age/ages-6-9">Little Explorers</FLink>
+            <FLink href="/programs/age/ages-10-13">Junior Creators</FLink>
+            <FLink href="/programs/age/ages-14-plus">Teen Makers</FLink>
           </FooterCol>
-          <FooterCol title="Summer Camp">
-            <FLink href="/summer-camp">All camps</FLink>
+          <FooterCol title="Montessori">
+            <FLink href="/montessori">Haven Montessori</FLink>
             <FLink href="/about">Our team</FLink>
           </FooterCol>
         </div>

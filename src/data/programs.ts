@@ -1,5 +1,19 @@
+import type { ParticipantKind, ProgramSectionId } from "@/types/sanity";
+
 export type AgeGroupId = "ages-6-9" | "ages-10-13" | "ages-14-plus";
-export type CategoryId = "arts" | "cooking" | "science" | "sports" | "drama" | "music";
+export type CategoryId =
+  | "autism"
+  | "montessori"
+  | "early-learning"
+  | "therapy"
+  | "life-skills"
+  | "parent-support"
+  | "arts"
+  | "cooking"
+  | "science"
+  | "sports"
+  | "drama"
+  | "music";
 
 export interface Program {
   id: string;
@@ -7,6 +21,9 @@ export interface Program {
   category: CategoryId;
   categoryLabel: string;
   categoryEmoji: string;
+  section?: ProgramSectionId;
+  subsectionLabel?: string;
+  participantKind?: ParticipantKind;
   ageGroup: AgeGroupId;
   ageLabel: string; // "Ages 8–12"
   duration: string; // "6 weeks · 90 min/session"
@@ -21,14 +38,17 @@ export interface Program {
   shortDescription: string;
   longDescription: string;
   whatKidsWillDo: string[];
+  highlights?: string[];
   instructor: {
     name: string;
     role: string;
     bio: string;
     photo: string;
   };
-  type: "workshop" | "camp";
-  campType?: "Day Camp" | "Residential";
+  type: "program" | "montessori";
+  campType?: "Haven Montessori" | "Early Years" | "Practical Life" | "Day Camp" | "Residential";
+  featured?: boolean;
+  order?: number;
 }
 
 const stock = (id: string, q = "") =>
@@ -74,7 +94,7 @@ export const programs: Program[] = [
       bio: "Illustrator and former school art teacher. Believes every child is already an artist.",
       photo: stock("1544005313-94ddf0286df2"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "tiny-chefs",
@@ -113,7 +133,7 @@ export const programs: Program[] = [
       bio: "Trained chef and dad of three. Specialty: getting picky eaters to ask for seconds.",
       photo: stock("1438761681033-6461ffad8d80"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "backyard-scientists",
@@ -152,7 +172,7 @@ export const programs: Program[] = [
       bio: "Marine biologist turned educator. Has a whole drawer of safety goggles.",
       photo: stock("1573496359142-b8d87734a5a2"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "mini-mvp-soccer",
@@ -191,7 +211,7 @@ export const programs: Program[] = [
       bio: "Former semi-pro player. Believes the best coach is the one who cheers loudest.",
       photo: stock("1500648767791-00dcc994a43e"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "stage-stars",
@@ -230,7 +250,7 @@ export const programs: Program[] = [
       bio: "Theatre director and storyteller. Has never met a shy kid who stayed shy.",
       photo: stock("1494790108377-be9c29b29330"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "ukulele-jam",
@@ -269,7 +289,7 @@ export const programs: Program[] = [
       bio: "Singer-songwriter and music teacher. Travels with at least three ukuleles.",
       photo: stock("1463453091185-61582044d556"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "teen-makers-clay",
@@ -308,7 +328,7 @@ export const programs: Program[] = [
       bio: "Studio ceramicist with 15 years on the wheel. Patient. Endlessly patient.",
       photo: stock("1487412720507-e7ab37603c6f"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "teen-songwriting",
@@ -346,7 +366,7 @@ export const programs: Program[] = [
       bio: "Singer-songwriter and music teacher. Travels with at least three ukuleles.",
       photo: stock("1463453091185-61582044d556"),
     },
-    type: "workshop",
+    type: "program",
   },
   {
     id: "teen-improv",
@@ -384,9 +404,9 @@ export const programs: Program[] = [
       bio: "Theatre director and storyteller. Has never met a shy kid who stayed shy.",
       photo: stock("1494790108377-be9c29b29330"),
     },
-    type: "workshop",
+    type: "program",
   },
-  // Summer camps
+  // Montessori programs
   {
     id: "camp-mini-adventurers",
     title: "Mini Adventurers Day Camp",
@@ -424,8 +444,8 @@ export const programs: Program[] = [
       bio: "Illustrator and former school art teacher. Believes every child is already an artist.",
       photo: stock("1544005313-94ddf0286df2"),
     },
-    type: "camp",
-    campType: "Day Camp",
+    type: "montessori",
+    campType: "Haven Montessori",
   },
   {
     id: "camp-creators",
@@ -464,8 +484,8 @@ export const programs: Program[] = [
       bio: "Former semi-pro player. Believes the best coach is the one who cheers loudest.",
       photo: stock("1500648767791-00dcc994a43e"),
     },
-    type: "camp",
-    campType: "Day Camp",
+    type: "montessori",
+    campType: "Haven Montessori",
   },
   {
     id: "camp-explorer-teens",
@@ -504,8 +524,495 @@ export const programs: Program[] = [
       bio: "Studio ceramicist with 15 years on the wheel. Patient. Endlessly patient.",
       photo: stock("1487412720507-e7ab37603c6f"),
     },
-    type: "camp",
-    campType: "Residential",
+    type: "montessori",
+    campType: "Practical Life",
+  },
+  {
+    id: "montessori-prepared-classroom",
+    title: "Montessori Prepared Classroom",
+    category: "montessori",
+    categoryLabel: "Montessori",
+    categoryEmoji: "🌱",
+    section: "haven-montessori",
+    subsectionLabel: "Montessori",
+    participantKind: "child",
+    ageGroup: "ages-6-9",
+    ageLabel: "Ages 3–6",
+    duration: "Monthly program",
+    price: "Contact for fee",
+    spotsLeft: 6,
+    totalSpots: 18,
+    dates: "Admissions open",
+    time: "Morning batch",
+    location: "Haven Montessori Classroom",
+    image: stock("1503454537195-1dcabb73ffb9"),
+    gallery: [stock("1503454537195-1dcabb73ffb9"), stock("1502086223501-7ea6ecd79368")],
+    shortDescription: "A calm Montessori environment for independence, language, focus, and hands-on learning.",
+    longDescription:
+      "Children work with age-appropriate Montessori materials, practical life activities, language lessons, and guided routines that help them grow in confidence at their own pace.",
+    whatKidsWillDo: [
+      "Practice practical life and fine-motor activities",
+      "Explore early language, numbers, and sensorial materials",
+      "Build independence through classroom routines",
+    ],
+    highlights: [
+      "Prepared Montessori environment",
+      "Small-group guidance",
+      "Focus on independence, language, and confidence",
+    ],
+    instructor: {
+      name: "Maya Okafor",
+      role: "Montessori Lead",
+      bio: "Early-years educator focused on calm routines and child-led discovery.",
+      photo: stock("1544005313-94ddf0286df2"),
+    },
+    type: "montessori",
+    campType: "Haven Montessori",
+    order: 13,
+  },
+  {
+    id: "day-care-monthly",
+    title: "Day Care Monthly",
+    category: "early-learning",
+    categoryLabel: "Day Care",
+    categoryEmoji: "🏡",
+    section: "haven-montessori",
+    subsectionLabel: "Day Care Monthly",
+    participantKind: "child",
+    ageGroup: "ages-6-9",
+    ageLabel: "Early years",
+    duration: "Monthly",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 20,
+    dates: "Monthly enrollment",
+    time: "Weekday care",
+    location: "Haven Montessori",
+    image: stock("1542810634-71277d95dcbb"),
+    gallery: [stock("1542810634-71277d95dcbb"), stock("1514315384763-ba401779410f")],
+    shortDescription: "Monthly daycare with caring routines, supervised play, meals support, and rest time.",
+    longDescription:
+      "A dependable monthly daycare option for families who want warm supervision, predictable routines, play, and early-years care in the Haven Montessori environment.",
+    whatKidsWillDo: ["Settle into daily care routines", "Play, rest, and learn with supervision", "Join simple creative and sensory activities"],
+    highlights: ["Monthly daycare plan", "Warm supervision", "Routine-based early-years care"],
+    instructor: {
+      name: "Maya Okafor",
+      role: "Day Care Coordinator",
+      bio: "Early-years educator focused on calm routines and child-led discovery.",
+      photo: stock("1544005313-94ddf0286df2"),
+    },
+    type: "montessori",
+    campType: "Day Camp",
+    order: 14,
+  },
+  {
+    id: "day-care-hourly",
+    title: "Day Care Hourly",
+    category: "early-learning",
+    categoryLabel: "Day Care",
+    categoryEmoji: "⏰",
+    section: "haven-montessori",
+    subsectionLabel: "Day Care Hourly",
+    participantKind: "child",
+    ageGroup: "ages-6-9",
+    ageLabel: "Early years",
+    duration: "Hourly",
+    price: "Hourly rate",
+    spotsLeft: 10,
+    totalSpots: 20,
+    dates: "Subject to availability",
+    time: "Flexible hours",
+    location: "Haven Montessori",
+    image: stock("1514315384763-ba401779410f"),
+    gallery: [stock("1514315384763-ba401779410f"), stock("1542810634-71277d95dcbb")],
+    shortDescription: "Flexible hourly daycare for short stays, errands, and occasional support.",
+    longDescription:
+      "Hourly daycare helps families book short, supervised care windows with the same warm routines and child-friendly environment.",
+    whatKidsWillDo: ["Join supervised play", "Rest and settle in a safe space", "Take part in simple activities when available"],
+    highlights: ["Flexible hourly booking", "Short-stay care", "Subject to slot availability"],
+    instructor: {
+      name: "Maya Okafor",
+      role: "Day Care Coordinator",
+      bio: "Early-years educator focused on calm routines and child-led discovery.",
+      photo: stock("1544005313-94ddf0286df2"),
+    },
+    type: "montessori",
+    campType: "Day Camp",
+    order: 15,
+  },
+  {
+    id: "party-hall-only",
+    title: "Party Hall Only",
+    category: "parent-support",
+    categoryLabel: "Party Hall",
+    categoryEmoji: "🎉",
+    section: "party-hall",
+    subsectionLabel: "Hall Only",
+    participantKind: "event",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Events",
+    duration: "3 hours",
+    price: "Contact for quote",
+    spotsLeft: 4,
+    totalSpots: 6,
+    dates: "Book your date",
+    time: "Flexible slots",
+    location: "The Hack House Party Hall",
+    image: stock("1519167758481-83f550bb49b3"),
+    gallery: [stock("1519167758481-83f550bb49b3"), stock("1527529482837-4698179dc6ce")],
+    shortDescription: "Book the hall space for a private party, birthday, or family gathering.",
+    longDescription:
+      "A simple hall-only package for families who want the venue and freedom to manage food, decor, and event flow themselves.",
+    whatKidsWillDo: ["Use the hall for a private celebration", "Bring your own event plan", "Coordinate timing with the team"],
+    highlights: ["3-hour hall booking", "Private venue space", "Bring your own setup"],
+    instructor: {
+      name: "Hack House Events Team",
+      role: "Events Coordinator",
+      bio: "The team helps families plan simple, cheerful events inside The Hack House.",
+      photo: stock("1494790108377-be9c29b29330"),
+    },
+    type: "program",
+    order: 16,
+  },
+  {
+    id: "party-hall-catering",
+    title: "Party Hall + Catering",
+    category: "parent-support",
+    categoryLabel: "Party Hall",
+    categoryEmoji: "🍽️",
+    section: "party-hall",
+    subsectionLabel: "Hall + Catering",
+    participantKind: "event",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Events",
+    duration: "3 hours",
+    price: "Contact for quote",
+    spotsLeft: 4,
+    totalSpots: 6,
+    dates: "Book your date",
+    time: "Flexible slots",
+    location: "The Hack House Party Hall",
+    image: stock("1527529482837-4698179dc6ce"),
+    gallery: [stock("1527529482837-4698179dc6ce"), stock("1555244162-803834f70033")],
+    shortDescription: "Hall booking with food support for a smoother family celebration.",
+    longDescription:
+      "This package adds catering support to the private hall booking so families can focus on hosting while the food plan is handled with the team.",
+    whatKidsWillDo: ["Host a private celebration", "Choose catering preferences with the team", "Enjoy a managed food setup"],
+    highlights: ["Hall booking included", "Catering support", "Flexible event timing"],
+    instructor: {
+      name: "Hack House Events Team",
+      role: "Events Coordinator",
+      bio: "The team helps families plan simple, cheerful events inside The Hack House.",
+      photo: stock("1494790108377-be9c29b29330"),
+    },
+    type: "program",
+    order: 17,
+  },
+  {
+    id: "party-hall-catering-decor",
+    title: "Party Hall + Catering + Decor",
+    category: "parent-support",
+    categoryLabel: "Party Hall",
+    categoryEmoji: "🎈",
+    section: "party-hall",
+    subsectionLabel: "Hall + Catering + Decor",
+    participantKind: "event",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Events",
+    duration: "3 hours",
+    price: "Contact for quote",
+    spotsLeft: 3,
+    totalSpots: 6,
+    dates: "Book your date",
+    time: "Flexible slots",
+    location: "The Hack House Party Hall",
+    image: stock("1530103862676-de8c9debad1d"),
+    gallery: [stock("1530103862676-de8c9debad1d"), stock("1519167758481-83f550bb49b3")],
+    shortDescription: "A complete party package with hall, catering, and decor support.",
+    longDescription:
+      "A fuller event package for families who want the space, food support, and cheerful decoration handled together.",
+    whatKidsWillDo: ["Celebrate in a decorated hall", "Use a coordinated food and decor plan", "Enjoy a managed party setup"],
+    highlights: ["Hall booking included", "Catering included", "Decor support included"],
+    instructor: {
+      name: "Hack House Events Team",
+      role: "Events Coordinator",
+      bio: "The team helps families plan simple, cheerful events inside The Hack House.",
+      photo: stock("1494790108377-be9c29b29330"),
+    },
+    type: "program",
+    order: 18,
+  },
+  {
+    id: "adult-quran-course",
+    title: "Quran Course",
+    category: "life-skills",
+    categoryLabel: "Adult Learning",
+    categoryEmoji: "📖",
+    section: "crash-courses-adults",
+    subsectionLabel: "Quran Course",
+    participantKind: "adult",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Adults",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "The Hack House Learning Room",
+    image: stock("1513475382585-d06e58bcb0e0"),
+    gallery: [stock("1513475382585-d06e58bcb0e0"), stock("1497633762265-9d179a990aa6")],
+    shortDescription: "A focused Quran crash course for adults with guided practice and supportive instruction.",
+    longDescription:
+      "A short adult learning session designed for guided revision, foundational practice, and confidence in a respectful small-group environment.",
+    whatKidsWillDo: ["Practice with guided support", "Review foundational concepts", "Ask questions in a small group"],
+    highlights: ["2-hour adult session", "Small-group guidance", "Foundational Quran practice"],
+    instructor: {
+      name: "Hack House Learning Team",
+      role: "Adult Course Instructor",
+      bio: "Patient instructors who keep crash courses practical, clear, and welcoming.",
+      photo: stock("1500648767791-00dcc994a43e"),
+    },
+    type: "program",
+    order: 19,
+  },
+  {
+    id: "adult-cooking-classes",
+    title: "Cooking Classes",
+    category: "cooking",
+    categoryLabel: "Cooking",
+    categoryEmoji: "🍳",
+    section: "crash-courses-adults",
+    subsectionLabel: "Cooking Classes",
+    participantKind: "adult",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Adults",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Hack House Teaching Kitchen",
+    image: stock("1556909114-f6e7ad7d3136"),
+    gallery: [stock("1556909114-f6e7ad7d3136"), stock("1490645935967-10de6ba17061")],
+    shortDescription: "A practical adult cooking crash course with hands-on recipes and kitchen confidence.",
+    longDescription:
+      "Adults learn approachable recipes, prep basics, and simple kitchen systems in a hands-on 2-hour session.",
+    whatKidsWillDo: ["Cook alongside the instructor", "Practice prep and timing", "Take home a repeatable recipe"],
+    highlights: ["Hands-on cooking", "2-hour adult session", "Beginner-friendly recipes"],
+    instructor: {
+      name: "Chef Luca Romano",
+      role: "Cooking Instructor",
+      bio: "Trained chef and dad of three. Specialty: getting picky eaters to ask for seconds.",
+      photo: stock("1438761681033-6461ffad8d80"),
+    },
+    type: "program",
+    order: 20,
+  },
+  {
+    id: "adult-crochet-course",
+    title: "Crochet Course",
+    category: "arts",
+    categoryLabel: "Arts & Crafts",
+    categoryEmoji: "🧶",
+    section: "crash-courses-adults",
+    subsectionLabel: "Crochet Course",
+    participantKind: "adult",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Adults",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Hack House Studio",
+    image: stock("1493106641515-6b5631de4bb9"),
+    gallery: [stock("1493106641515-6b5631de4bb9"), stock("1605714196241-00bf7a8fa7a0")],
+    shortDescription: "Learn crochet basics in a relaxed adult crash course.",
+    longDescription:
+      "A beginner-friendly session covering yarn, hooks, starter stitches, and a simple take-home practice project.",
+    whatKidsWillDo: ["Learn starter stitches", "Practice with guided support", "Start a simple crochet project"],
+    highlights: ["Beginner-friendly crochet", "Materials guidance", "2-hour adult session"],
+    instructor: {
+      name: "Renata Voss",
+      role: "Craft Instructor",
+      bio: "Studio maker with patient hands-on teaching experience.",
+      photo: stock("1487412720507-e7ab37603c6f"),
+    },
+    type: "program",
+    order: 21,
+  },
+  {
+    id: "toddler-tot-program",
+    title: "Toddler Tot Program",
+    category: "early-learning",
+    categoryLabel: "Early Learning",
+    categoryEmoji: "🧸",
+    section: "crash-courses-children",
+    subsectionLabel: "Toddler Tot Program",
+    participantKind: "child",
+    ageGroup: "ages-6-9",
+    ageLabel: "Ages 2–5",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Haven Montessori",
+    image: stock("1502086223501-7ea6ecd79368"),
+    gallery: [stock("1502086223501-7ea6ecd79368"), stock("1542810634-71277d95dcbb")],
+    shortDescription: "A gentle toddler session with sensory play, movement, and early social routines.",
+    longDescription:
+      "Toddlers explore supervised play, songs, sensory work, and simple routines in a short, warm session.",
+    whatKidsWillDo: ["Explore sensory play", "Join songs and movement", "Practice simple social routines"],
+    highlights: ["Ages 2-5", "2-hour child session", "Gentle early-years activities"],
+    instructor: {
+      name: "Maya Okafor",
+      role: "Early Years Instructor",
+      bio: "Early-years educator focused on calm routines and child-led discovery.",
+      photo: stock("1544005313-94ddf0286df2"),
+    },
+    type: "program",
+    order: 22,
+  },
+  {
+    id: "little-leaders-growth",
+    title: "Little Leaders Growth Program",
+    category: "life-skills",
+    categoryLabel: "Life Skills",
+    categoryEmoji: "🌟",
+    section: "crash-courses-children",
+    subsectionLabel: "Little Leaders Growth Program",
+    participantKind: "child",
+    ageGroup: "ages-6-9",
+    ageLabel: "Ages 6–12",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Hack House Studio",
+    image: stock("1503454537195-1dcabb73ffb9"),
+    gallery: [stock("1503454537195-1dcabb73ffb9"), stock("1532094349884-543bc11b234d")],
+    shortDescription: "A confidence and growth session for children ages 6 to 12.",
+    longDescription:
+      "Children practice teamwork, speaking up, problem-solving, and simple leadership habits in an active 2-hour crash course.",
+    whatKidsWillDo: ["Play teamwork games", "Practice speaking with confidence", "Build simple leadership habits"],
+    highlights: ["Ages 6-12", "Confidence-building", "Teamwork and communication"],
+    instructor: {
+      name: "Priya Devereux",
+      role: "Growth Instructor",
+      bio: "Theatre director and storyteller. Has never met a shy kid who stayed shy.",
+      photo: stock("1494790108377-be9c29b29330"),
+    },
+    type: "program",
+    order: 23,
+  },
+  {
+    id: "teen-led-program",
+    title: "Teen Led Program",
+    category: "life-skills",
+    categoryLabel: "Life Skills",
+    categoryEmoji: "⭐",
+    section: "crash-courses-children",
+    subsectionLabel: "Teen Led Program",
+    participantKind: "child",
+    ageGroup: "ages-14-plus",
+    ageLabel: "Ages 12–15",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Hack House Studio",
+    image: stock("1527224538127-2104bb71c51b"),
+    gallery: [stock("1527224538127-2104bb71c51b"), stock("1503095396549-807759245b35")],
+    shortDescription: "A teen confidence session focused on expression, initiative, and peer leadership.",
+    longDescription:
+      "Teens practice guided discussions, leadership prompts, and collaborative challenges in a short, structured session.",
+    whatKidsWillDo: ["Practice peer leadership", "Join guided discussions", "Build initiative through group challenges"],
+    highlights: ["Ages 12-15", "Teen leadership", "Expression and initiative"],
+    instructor: {
+      name: "Priya Devereux",
+      role: "Teen Program Instructor",
+      bio: "Theatre director and storyteller. Has never met a shy kid who stayed shy.",
+      photo: stock("1494790108377-be9c29b29330"),
+    },
+    type: "program",
+    order: 24,
+  },
+  {
+    id: "children-painting-sketch",
+    title: "Painting & Sketch",
+    category: "arts",
+    categoryLabel: "Arts & Crafts",
+    categoryEmoji: "🎨",
+    section: "crash-courses-children",
+    subsectionLabel: "Painting & Sketch",
+    participantKind: "child",
+    ageGroup: "ages-10-13",
+    ageLabel: "Ages 8+",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Hack House Art Studio",
+    image: stock("1499951360447-b19be8fe80f5"),
+    gallery: [stock("1499951360447-b19be8fe80f5"), stock("1513364776144-60967b0f800f")],
+    shortDescription: "A short art crash course for sketching, color, and creative confidence.",
+    longDescription:
+      "Children learn simple drawing foundations, color choices, and guided painting techniques, then finish a take-home artwork.",
+    whatKidsWillDo: ["Sketch a simple composition", "Try guided painting techniques", "Finish a take-home artwork"],
+    highlights: ["Ages 8+", "Sketching and painting", "Take-home artwork"],
+    instructor: {
+      name: "Maya Okafor",
+      role: "Lead Arts Instructor",
+      bio: "Illustrator and former school art teacher. Believes every child is already an artist.",
+      photo: stock("1544005313-94ddf0286df2"),
+    },
+    type: "program",
+    order: 25,
+  },
+  {
+    id: "children-cooking",
+    title: "Cooking",
+    category: "cooking",
+    categoryLabel: "Cooking",
+    categoryEmoji: "🍳",
+    section: "crash-courses-children",
+    subsectionLabel: "Cooking",
+    participantKind: "child",
+    ageGroup: "ages-6-9",
+    ageLabel: "Ages 6–12",
+    duration: "2 hours",
+    price: "Contact for fee",
+    spotsLeft: 8,
+    totalSpots: 12,
+    dates: "Next batch forming",
+    time: "Flexible batch",
+    location: "Hack House Teaching Kitchen",
+    image: stock("1556909114-f6e7ad7d3136"),
+    gallery: [stock("1556909114-f6e7ad7d3136"), stock("1551218808-94e220e084d2")],
+    shortDescription: "A hands-on kids cooking crash course for ages 6 to 12.",
+    longDescription:
+      "Children measure, mix, cook, and plate a simple recipe while learning kitchen safety and teamwork.",
+    whatKidsWillDo: ["Measure and mix ingredients", "Practice kitchen safety", "Cook and plate a simple recipe"],
+    highlights: ["Ages 6-12", "Hands-on cooking", "Kitchen safety basics"],
+    instructor: {
+      name: "Chef Luca Romano",
+      role: "Cooking Instructor",
+      bio: "Trained chef and dad of three. Specialty: getting picky eaters to ask for seconds.",
+      photo: stock("1438761681033-6461ffad8d80"),
+    },
+    type: "program",
+    order: 26,
   },
 ];
 
@@ -541,6 +1048,12 @@ export const ageGroups: Record<
 
 export const categories: { id: CategoryId | "all"; label: string; emoji: string }[] = [
   { id: "all", label: "All", emoji: "✨" },
+  { id: "autism", label: "Autism Support", emoji: "💙" },
+  { id: "montessori", label: "Montessori", emoji: "🌱" },
+  { id: "early-learning", label: "Early Learning", emoji: "📚" },
+  { id: "therapy", label: "Therapy", emoji: "🤝" },
+  { id: "life-skills", label: "Life Skills", emoji: "✨" },
+  { id: "parent-support", label: "Parent Support", emoji: "🏡" },
   { id: "arts", label: "Arts & Crafts", emoji: "🎨" },
   { id: "cooking", label: "Cooking", emoji: "🍳" },
   { id: "science", label: "Science", emoji: "🔬" },
@@ -571,7 +1084,7 @@ export const testimonials = [
   {
     id: 3,
     quote:
-      "Hands down the best summer camp we've sent our kids to. The team genuinely cares — and it shows in everything.",
+      "Hands down the best Montessori program we've sent our kids to. The team genuinely cares — and it shows in everything.",
     parent: "Priya Patel",
     childAge: "Mom of Rohan & Anika, 7 and 11",
     program: "Camp Creators",
@@ -645,7 +1158,7 @@ export const stats = [
 
 export const getProgramById = (id: string) => programs.find((p) => p.id === id);
 
-export const getProgramsByAgeGroup = (ageGroup: AgeGroupId, type: "workshop" | "camp" = "workshop") =>
+export const getProgramsByAgeGroup = (ageGroup: AgeGroupId, type: "program" | "montessori" = "program") =>
   programs.filter((p) => p.ageGroup === ageGroup && p.type === type);
 
 export const getRelatedPrograms = (program: Program, limit = 3) =>

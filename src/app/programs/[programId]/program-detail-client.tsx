@@ -9,10 +9,28 @@ import {
 import type { Program } from "@/types/sanity";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProgramCard } from "@/components/program-card";
+import { getParticipantKind, getProgramSection } from "@/data/sections";
 
 export default function ProgramDetailClient({ program, related }: { program: Program; related: Program[] }) {
   const fillPct = Math.round(((program.totalSpots - program.spotsLeft) / program.totalSpots) * 100);
   const urgency = program.spotsLeft <= 3;
+  const section = getProgramSection(program);
+  const participantKind = getParticipantKind(program);
+  const highlights = program.highlights?.length ? program.highlights : (program.whatKidsWillDo ?? []);
+  const gallery = program.gallery ?? [];
+  const relatedPrograms = related ?? [];
+  const participantNoun =
+    participantKind === "adult" ? "adult" : participantKind === "event" ? "event" : "child";
+  const highlightsTitle =
+    participantKind === "adult"
+      ? "What You Will Do"
+      : participantKind === "event"
+        ? "Package Highlights"
+        : "What Kids Will Do";
+  const aboutLine =
+    participantKind === "event"
+      ? "Every Hack House event package is coordinated with the team, with clear timing, setup expectations, and WhatsApp follow-up before your booking."
+      : "Every Haven session is led by a vetted instructor, capped at small group sizes, and built around joyful learning with practical support.";
 
   const [lightbox, setLightbox] = React.useState<string | null>(null);
 
@@ -27,7 +45,7 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
             <Breadcrumbs
               items={[
                 { label: "Home", href: "/" },
-                { label: program.type === "camp" ? "Summer Camp" : "Workshops", href: program.type === "camp" ? "/summer-camp" : "/workshops" },
+                { label: section.title, href: section.href },
                 { label: program.title },
               ]}
             />
@@ -38,9 +56,14 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
               <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 font-display text-xs font-extrabold text-brand-teal">
                 {program.categoryEmoji} {program.categoryLabel}
               </span>
-              {program.campType && (
+              {section.id !== "haven-autism" && (
                 <span className="inline-flex items-center rounded-full bg-brand-yellow px-3 py-1 font-display text-xs font-extrabold text-brand-teal">
-                  {program.campType}
+                  {section.title}
+                </span>
+              )}
+              {program.subsectionLabel && (
+                <span className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 font-display text-xs font-extrabold text-white">
+                  {program.subsectionLabel}
                 </span>
               )}
             </div>
@@ -55,9 +78,9 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
           <div className="min-w-0">
             <p className="text-lg leading-relaxed text-brand-teal">{program.shortDescription}</p>
 
-            <h2 className="mt-10 font-display text-2xl font-extrabold text-brand-teal">What Kids Will Do</h2>
+            <h2 className="mt-10 font-display text-2xl font-extrabold text-brand-teal">{highlightsTitle}</h2>
             <ul className="mt-4 grid gap-3">
-              {program.whatKidsWillDo.map((item, i) => (
+              {highlights.map((item, i) => (
                 <li key={i} className="flex items-start gap-3 rounded-2xl bg-white p-4 shadow-soft">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                   <span className="text-sm text-brand-teal">{item}</span>
@@ -68,15 +91,12 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
             <h2 className="mt-10 font-display text-2xl font-extrabold text-brand-teal">About This Program</h2>
             <div className="mt-3 space-y-4 text-text-soft leading-relaxed">
               <p>{program.longDescription}</p>
-              <p>
-                Every Hack House session is led by a vetted instructor, capped at small group sizes, and built around
-                joyful learning. Materials are included in the price.
-              </p>
+              <p>{aboutLine}</p>
             </div>
 
-            <h2 className="mt-10 font-display text-2xl font-extrabold text-brand-teal">Photos from past sessions</h2>
+            <h2 className="mt-10 font-display text-2xl font-extrabold text-brand-teal">Photos</h2>
             <div className="mt-4 columns-2 gap-3 md:columns-3 [&>*]:mb-3">
-              {program.gallery.map((src, i) => (
+              {gallery.map((src, i) => (
                 <button
                   key={i}
                   type="button"
@@ -98,7 +118,7 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
               />
               <div className="min-w-0 flex-1">
                 <span className="inline-flex items-center gap-1 rounded-full bg-brand-mint px-2.5 py-1 font-display text-[11px] font-extrabold uppercase tracking-wide text-primary">
-                  <Award className="h-3 w-3" /> Expert Instructor
+                  <Award className="h-3 w-3" /> Program Lead
                 </span>
                 <h3 className="mt-2 font-display text-lg font-extrabold text-brand-teal">{program.instructor.name}</h3>
                 <p className="text-sm font-semibold text-text-soft">{program.instructor.role}</p>
@@ -111,7 +131,9 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl bg-white p-6 shadow-lift">
               <div className="font-display text-4xl font-black text-brand-orange">{program.price}</div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-text-soft">per child · materials included</div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-text-soft">
+                {participantKind === "event" ? "booking package" : `per ${participantNoun}`}
+              </div>
 
               <ul className="mt-5 space-y-3 text-sm text-brand-teal">
                 <SidebarRow icon={<Calendar className="h-4 w-4" />} label="Dates" value={program.dates} />
@@ -124,7 +146,7 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
                 <div className="flex items-center justify-between text-xs font-display font-extrabold text-brand-teal">
                   <span className="inline-flex items-center gap-1">
                     <Users className="h-3.5 w-3.5" />
-                    {program.spotsLeft} spots left
+                    {program.spotsLeft} {participantKind === "event" ? "slots" : "spots"} left
                   </span>
                   <span className={urgency ? "text-brand-orange" : "text-text-soft"}>
                     {urgency ? "Filling fast!" : `${program.totalSpots - program.spotsLeft}/${program.totalSpots} booked`}
@@ -142,7 +164,7 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
                 href={`/register?program=${program.id}`}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3.5 font-display text-base font-extrabold text-white shadow-glow-orange transition-transform hover:scale-[1.02]"
               >
-                Register for This Program
+                {participantKind === "event" ? "Enquire About This Package" : "Register for This Offering"}
               </Link>
 
               <button
@@ -169,11 +191,11 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
           </aside>
         </div>
 
-        {related.length > 0 && (
+        {relatedPrograms.length > 0 && (
           <div className="mx-auto mt-20 max-w-7xl px-6 md:px-8">
             <h2 className="font-display text-3xl font-extrabold text-brand-teal">You Might Also Like</h2>
             <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {related.map((p) => (
+              {relatedPrograms.map((p) => (
                 <ProgramCard key={p.id} program={p} />
               ))}
             </div>
@@ -186,13 +208,15 @@ export default function ProgramDetailClient({ program, related }: { program: Pro
         <div className="flex items-center gap-3">
           <div>
             <div className="font-display text-xl font-extrabold text-brand-orange">{program.price}</div>
-            <div className="text-[11px] text-text-soft">{program.spotsLeft} spots left</div>
+            <div className="text-[11px] text-text-soft">
+              {program.spotsLeft} {participantKind === "event" ? "slots" : "spots"} left
+            </div>
           </div>
           <Link
             href={`/register?program=${program.id}`}
             className="ml-auto inline-flex items-center justify-center gap-1 rounded-full bg-brand-orange px-5 py-3 font-display text-sm font-extrabold text-white shadow-glow-orange"
           >
-            Register <ArrowRight className="h-4 w-4" />
+            {participantKind === "event" ? "Enquire" : "Register"} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </div>

@@ -3,31 +3,14 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Sparkles, Palette, ChefHat, FlaskConical, Trophy, Drama, Music } from "lucide-react";
+import { Menu, X, ChevronDown, Sparkles } from "lucide-react";
 import { HouseLogo } from "./brand";
-
-const ageGroupsData = {
-  "ages-6-9": { name: "Little Explorers", range: "Ages 6–9", tagline: "Big imaginations, endless fun", campName: "Mini Adventurers", campRange: "Ages 5–8" },
-  "ages-10-13": { name: "Young Makers", range: "Ages 10–13", tagline: "Building real skills, real confidence", campName: "Trailblazers", campRange: "Ages 9–12" },
-  "ages-14-plus": { name: "Teen Creators", range: "Ages 14+", tagline: "Level up with expert-led projects", campName: "Pathfinders", campRange: "Ages 13–15" },
-} as const;
-
-const workshopAgeLinks = [
-  { id: "ages-6-9" as const, icon: Palette, color: "text-primary" },
-  { id: "ages-10-13" as const, icon: FlaskConical, color: "text-brand-orange" },
-  { id: "ages-14-plus" as const, icon: Sparkles, color: "text-brand-pink" },
-];
-
-const campAgeLinks = [
-  { id: "ages-6-9" as const, icon: ChefHat, color: "text-primary" },
-  { id: "ages-10-13" as const, icon: Drama, color: "text-brand-orange" },
-  { id: "ages-14-plus" as const, icon: Music, color: "text-brand-pink" },
-];
+import { programSections } from "@/data/sections";
 
 export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [openDrop, setOpenDrop] = React.useState<null | "workshops" | "camps">(null);
+  const [openDrop, setOpenDrop] = React.useState<null | "sections">(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
 
@@ -45,7 +28,7 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
-  const open = (which: "workshops" | "camps") => {
+  const open = (which: "sections") => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setOpenDrop(which);
   };
@@ -71,82 +54,32 @@ export function Navbar() {
         <nav className="hidden items-center gap-1 lg:flex">
           <NavLink href="/" pathname={pathname}>Home</NavLink>
           <DropdownTrigger
-            label="Workshops"
-            onMouseEnter={() => open("workshops")}
+            label="Sections"
+            onMouseEnter={() => open("sections")}
             onMouseLeave={scheduleClose}
-            isOpen={openDrop === "workshops"}
+            isOpen={openDrop === "sections"}
           >
             <Dropdown
-              isOpen={openDrop === "workshops"}
-              onMouseEnter={() => open("workshops")}
+              isOpen={openDrop === "sections"}
+              onMouseEnter={() => open("sections")}
               onMouseLeave={scheduleClose}
             >
-              <DropdownHeader title="Workshops by age" subtitle="Hands-on weekly sessions" />
+              <DropdownHeader title="The Hack House sections" subtitle="Programs, daycare, parties, and crash courses" />
               <div className="grid gap-2">
-                {workshopAgeLinks.map((l) => {
-                  const ag = ageGroupsData[l.id];
-                  const Icon = l.icon;
+                {programSections.map((section) => {
                   return (
                     <Link
-                      key={l.id}
-                      href={`/workshops/${l.id}`}
+                      key={section.id}
+                      href={section.href}
                       onClick={() => setOpenDrop(null)}
                       className="group flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-brand-mint"
                     >
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-brand-mint ${l.color}`}>
-                        <Icon className="h-5 w-5" />
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${section.accent} text-lg`}>
+                        {section.emoji}
                       </div>
                       <div className="flex-1">
-                        <div className="font-display text-sm font-bold text-brand-teal">
-                          {ag.name} <span className="text-text-soft font-medium">· {ag.range}</span>
-                        </div>
-                        <div className="text-xs text-text-soft">{ag.tagline}</div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-              <Link
-                href="/workshops"
-                onClick={() => setOpenDrop(null)}
-                className="mt-3 block rounded-xl bg-brand-mint px-3 py-2 text-center text-sm font-bold text-primary hover:bg-primary/15"
-              >
-                Browse all workshops →
-              </Link>
-            </Dropdown>
-          </DropdownTrigger>
-
-          <DropdownTrigger
-            label="Summer Camp"
-            onMouseEnter={() => open("camps")}
-            onMouseLeave={scheduleClose}
-            isOpen={openDrop === "camps"}
-          >
-            <Dropdown
-              isOpen={openDrop === "camps"}
-              onMouseEnter={() => open("camps")}
-              onMouseLeave={scheduleClose}
-            >
-              <DropdownHeader title="Summer Camp" subtitle="The best summer ever ☀️" />
-              <div className="grid gap-2">
-                {campAgeLinks.map((l) => {
-                  const ag = ageGroupsData[l.id];
-                  const Icon = l.icon;
-                  return (
-                    <Link
-                      key={l.id}
-                      href="/summer-camp"
-                      onClick={() => setOpenDrop(null)}
-                      className="group flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-brand-mint"
-                    >
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-brand-mint ${l.color}`}>
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-display text-sm font-bold text-brand-teal">
-                          {ag.campName} <span className="text-text-soft font-medium">· {ag.campRange}</span>
-                        </div>
-                        <div className="text-xs text-text-soft">{ag.tagline}</div>
+                        <div className="font-display text-sm font-bold text-brand-teal">{section.title}</div>
+                        <div className="text-xs text-text-soft">{section.subtitle}</div>
                       </div>
                     </Link>
                   );
@@ -259,7 +192,7 @@ function DropdownHeader({ title, subtitle }: { title: string; subtitle: string }
 }
 
 function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [expanded, setExpanded] = React.useState<null | "workshops" | "camps">(null);
+  const [expanded, setExpanded] = React.useState<null | "sections">(null);
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true">
@@ -291,51 +224,31 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             Home
           </Link>
           <MobileAccordion
-            label="Workshops"
-            isOpen={expanded === "workshops"}
-            onToggle={() => setExpanded(expanded === "workshops" ? null : "workshops")}
+            label="Sections"
+            isOpen={expanded === "sections"}
+            onToggle={() => setExpanded(expanded === "sections" ? null : "sections")}
           >
-            {workshopAgeLinks.map((l) => {
-              const ag = ageGroupsData[l.id];
+            {programSections.map((section) => {
               return (
                 <Link
-                  key={l.id}
-                  href={`/workshops/${l.id}`}
+                  key={section.id}
+                  href={section.href}
                   onClick={onClose}
                   className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-teal hover:bg-brand-mint"
                 >
-                  <span className="font-display font-extrabold">{ag.name}</span>{" "}
-                  <span className="text-text-soft">· {ag.range}</span>
+                  <span className="mr-1">{section.emoji}</span>
+                  <span className="font-display font-extrabold">{section.title}</span>{" "}
+                  <span className="text-text-soft">· {section.shortTitle}</span>
                 </Link>
               );
             })}
             <Link
-              href="/workshops"
+              href="/programs"
               onClick={onClose}
               className="block rounded-xl px-3 py-2.5 text-sm font-bold text-primary hover:bg-brand-mint"
             >
-              Browse all workshops →
+              Browse all programs →
             </Link>
-          </MobileAccordion>
-          <MobileAccordion
-            label="Summer Camp"
-            isOpen={expanded === "camps"}
-            onToggle={() => setExpanded(expanded === "camps" ? null : "camps")}
-          >
-            {campAgeLinks.map((l) => {
-              const ag = ageGroupsData[l.id];
-              return (
-                <Link
-                  key={l.id}
-                  href="/summer-camp"
-                  onClick={onClose}
-                  className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-brand-teal hover:bg-brand-mint"
-                >
-                  <span className="font-display font-extrabold">{ag.campName}</span>{" "}
-                  <span className="text-text-soft">· {ag.campRange}</span>
-                </Link>
-              );
-            })}
           </MobileAccordion>
           <Link
             href="/about"

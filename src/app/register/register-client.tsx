@@ -3,9 +3,10 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import type { Program, AgeGroupId } from "@/types/sanity";
+import type { Program, AgeGroupId, ProgramSectionId } from "@/types/sanity";
 import { MessageCircle, ArrowRight, Phone, Mail, User, Heart, Info } from "lucide-react";
 import { Blob } from "@/components/brand";
+import { getParticipantKind, getProgramSectionId, programSections, sectionById } from "@/data/sections";
 
 interface FormState {
   childName: string;
@@ -14,7 +15,7 @@ interface FormState {
   parentName: string;
   email: string;
   whatsapp: string;
-  type: "workshop" | "camp";
+  section: ProgramSectionId | "";
   ageGroup: AgeGroupId | "";
   programId: string;
   source: string;
@@ -35,7 +36,7 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
     parentName: "",
     email: "",
     whatsapp: "",
-    type: preselected?.type ?? "workshop",
+    section: preselected ? getProgramSectionId(preselected) : "",
     ageGroup: preselected?.ageGroup ?? "",
     programId: preselected?.id ?? "",
     source: "",
@@ -48,19 +49,30 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
     setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
-  const availablePrograms = programs.filter(
-    (p) => p.type === form.type && (form.ageGroup === "" || p.ageGroup === form.ageGroup),
-  );
+  const selectedProgram = programs.find((p) => p.id === form.programId);
+  const selectedSection = form.section ? sectionById[form.section] : undefined;
+  const participantKind = selectedProgram
+    ? getParticipantKind(selectedProgram)
+    : selectedSection?.participantKind ?? "child";
+  const isEvent = participantKind === "event";
+  const isAdult = participantKind === "adult";
+
+  const availablePrograms = programs.filter((p) => {
+    const matchesSection = form.section === "" || getProgramSectionId(p) === form.section;
+    const matchesAge = isEvent || isAdult || form.ageGroup === "" || p.ageGroup === form.ageGroup;
+    return matchesSection && matchesAge;
+  });
 
   const validate = () => {
     const e: typeof errors = {};
-    if (!form.childName.trim()) e.childName = "Please enter your child's name";
-    if (!form.childAge.trim()) e.childAge = "Please enter your child's age";
+    if (!form.childName.trim()) e.childName = isEvent ? "Please enter an event name" : "Please enter the participant name";
+    if (!form.childAge.trim()) e.childAge = isEvent ? "Please enter expected guests" : "Please enter the participant age";
     if (!form.parentName.trim()) e.parentName = "Please enter your name";
     if (!form.email.trim()) e.email = "Please enter your email";
     else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "That doesn't look like a valid email";
     if (!form.whatsapp.trim()) e.whatsapp = "We'll need a WhatsApp number to send instructions";
-    if (!form.programId) e.programId = "Please pick a program";
+    if (!form.section) e.section = "Please pick a section";
+    if (!form.programId) e.programId = "Please pick an offering";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -88,9 +100,9 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
         <Blob className="-left-24 top-0 h-80 w-80" color="white" opacity={0.15} />
         <div className="relative mx-auto max-w-3xl px-6 text-center md:px-8">
           <h1 className="font-display text-4xl font-black md:text-5xl">
-            Register Your Child <span className="inline-block animate-bounce-soft">📝</span>
+            Register or Enquire <span className="inline-block animate-bounce-soft">📝</span>
           </h1>
-          <p className="mt-3 text-lg text-brand-teal/90">Grab your spot before it fills up!</p>
+          <p className="mt-3 text-lg text-brand-teal/90">Choose a section, pick an offering, and we&apos;ll follow up on WhatsApp.</p>
         </div>
       </section>
 
@@ -100,16 +112,19 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
             <div className="mb-8 flex items-start gap-3 rounded-2xl border-2 border-primary/30 bg-primary/10 p-4">
               <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
               <div className="text-sm text-brand-teal">
-                <span className="font-display font-extrabold">Registering for: </span>
+                <span className="font-display font-extrabold">Selected offering: </span>
                 {preselected.title} · {preselected.ageLabel} · {preselected.dates}
               </div>
             </div>
           )}
 
           <form onSubmit={onSubmit} className="space-y-10">
-            <Section label="About Your Child" icon={<User className="h-4 w-4" />}>
+            <Section
+              label={isEvent ? "Event Details" : isAdult ? "Participant Details" : "About Your Child"}
+              icon={<User className="h-4 w-4" />}
+            >
               <Field
-                label="Child's Full Name"
+                label={isEvent ? "Event Name" : isAdult ? "Participant Full Name" : "Child's Full Name"}
                 required
                 error={errors.childName}
               >
@@ -117,38 +132,38 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
                   value={form.childName}
                   onChange={(e) => set("childName", e.target.value)}
                   data-error={!!errors.childName}
-                  placeholder="e.g. Lily Chen"
+                  placeholder={isEvent ? "e.g. Zoya's Birthday" : isAdult ? "e.g. Aisha Khan" : "e.g. Lily Chen"}
                   className={inputCls(!!errors.childName)}
                 />
               </Field>
-              <Field label="Child's Age" required error={errors.childAge}>
+              <Field label={isEvent ? "Expected Guests" : isAdult ? "Participant Age" : "Child's Age"} required error={errors.childAge}>
                 <input
                   type="number"
-                  min={4}
-                  max={18}
+                  min={isEvent ? 1 : 1}
+                  max={isEvent ? 300 : 99}
                   value={form.childAge}
                   onChange={(e) => set("childAge", e.target.value)}
                   data-error={!!errors.childAge}
-                  placeholder="e.g. 8"
+                  placeholder={isEvent ? "e.g. 35" : isAdult ? "e.g. 28" : "e.g. 8"}
                   className={inputCls(!!errors.childAge)}
                 />
               </Field>
               <Field
-                label="Medical Conditions / Special Needs"
-                helper="This helps us provide the best care. Optional."
+                label={isEvent ? "Event Requirements" : "Medical Conditions / Special Needs"}
+                helper={isEvent ? "Food, decor, timing, or setup notes. Optional." : "This helps us provide the best care. Optional."}
               >
                 <textarea
                   rows={3}
                   value={form.medical}
                   onChange={(e) => set("medical", e.target.value)}
-                  placeholder="Allergies, dietary needs, anything we should know..."
+                  placeholder={isEvent ? "Theme, food preferences, decor notes..." : "Allergies, dietary needs, anything we should know..."}
                   className={inputCls(false)}
                 />
               </Field>
             </Section>
 
-            <Section label="Parent or Guardian" icon={<Heart className="h-4 w-4" />}>
-              <Field label="Parent Full Name" required error={errors.parentName}>
+            <Section label={isEvent || isAdult ? "Contact Details" : "Parent or Guardian"} icon={<Heart className="h-4 w-4" />}>
+              <Field label={isEvent || isAdult ? "Contact Full Name" : "Parent Full Name"} required error={errors.parentName}>
                 <input
                   value={form.parentName}
                   onChange={(e) => set("parentName", e.target.value)}
@@ -174,7 +189,7 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
                 label="WhatsApp Number"
                 required
                 error={errors.whatsapp}
-                helper="We'll send payment instructions here."
+                helper="We'll send confirmation and next steps here."
               >
                 <div className="relative">
                   <MessageCircle className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#25D366]" />
@@ -190,47 +205,53 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
               </Field>
             </Section>
 
-            <Section label="Program Details" icon={<Phone className="h-4 w-4" />}>
-              <Field label="Program type">
-                <div className="grid grid-cols-2 gap-2 rounded-2xl bg-brand-mint p-1.5">
-                  {(["workshop", "camp"] as const).map((t) => (
-                    <button
-                      type="button"
-                      key={t}
-                      onClick={() => set("type", t)}
-                      className={`rounded-xl px-4 py-2.5 font-display text-sm font-extrabold transition-all ${
-                        form.type === t ? "bg-white text-brand-teal shadow-soft" : "text-text-soft"
-                      }`}
-                    >
-                      {t === "workshop" ? "Workshop" : "Summer Camp"}
-                    </button>
-                  ))}
-                </div>
-              </Field>
-              <Field label="Age Group">
+            <Section label="Offering Details" icon={<Phone className="h-4 w-4" />}>
+              <Field label="Section" required error={errors.section}>
                 <select
-                  value={form.ageGroup}
+                  value={form.section}
                   onChange={(e) => {
-                    const v = e.target.value as AgeGroupId | "";
-                    set("ageGroup", v);
+                    const v = e.target.value as ProgramSectionId | "";
+                    set("section", v);
+                    set("ageGroup", "");
                     set("programId", "");
                   }}
-                  className={inputCls(false)}
+                  data-error={!!errors.section}
+                  className={inputCls(!!errors.section)}
                 >
-                  <option value="">Any age group</option>
-                  <option value="ages-6-9">Ages 6–9</option>
-                  <option value="ages-10-13">Ages 10–13</option>
-                  <option value="ages-14-plus">Ages 14+</option>
+                  <option value="">Select a section</option>
+                  {programSections.map((section) => (
+                    <option key={section.id} value={section.id}>
+                      {section.title}
+                    </option>
+                  ))}
                 </select>
               </Field>
-              <Field label="Program" required error={errors.programId}>
+              {!isEvent && !isAdult && (
+                <Field label="Age Group">
+                  <select
+                    value={form.ageGroup}
+                    onChange={(e) => {
+                      const v = e.target.value as AgeGroupId | "";
+                      set("ageGroup", v);
+                      set("programId", "");
+                    }}
+                    className={inputCls(false)}
+                  >
+                    <option value="">Any age group</option>
+                    <option value="ages-6-9">Ages 6–9</option>
+                    <option value="ages-10-13">Ages 10–13</option>
+                    <option value="ages-14-plus">Ages 14+</option>
+                  </select>
+                </Field>
+              )}
+              <Field label="Offering" required error={errors.programId}>
                 <select
                   value={form.programId}
                   onChange={(e) => set("programId", e.target.value)}
                   data-error={!!errors.programId}
                   className={inputCls(!!errors.programId)}
                 >
-                  <option value="">Select a program</option>
+                  <option value="">Select an offering</option>
                   {availablePrograms.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.title} · {p.ageLabel} · {p.price}
@@ -271,11 +292,11 @@ export default function RegisterClient({ programs }: { programs: Program[] }) {
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-4 font-display text-base font-extrabold text-brand-orange-foreground shadow-glow-orange transition-transform hover:scale-[1.01]"
             >
-              Submit Registration <ArrowRight className="h-5 w-5" />
+              Submit Request <ArrowRight className="h-5 w-5" />
             </button>
             <p className="flex items-center justify-center gap-2 text-center text-xs text-text-soft">
               <MessageCircle className="h-4 w-4 text-[#25D366]" />
-              After submitting, we&apos;ll send payment instructions to your WhatsApp number.
+              After submitting, we&apos;ll send confirmation and next steps to your WhatsApp number.
             </p>
 
             <p className="text-center text-xs text-text-soft">

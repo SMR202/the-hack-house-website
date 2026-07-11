@@ -7,7 +7,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 export const metadata: Metadata = {
   title: "The Hack House — A Place to Explore, Create & Grow",
   description:
-    "Workshops & summer camps packed with creativity, adventure, and fun for kids aged 5 to 14. Arts, cooking, science, sports, drama, and music.",
+    "The Hack House is the parent company for Haven Autism and Haven Montessori programs for children and families.",
   authors: [{ name: "The Hack House" }],
   openGraph: {
     type: "website",
