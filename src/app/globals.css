@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+body:has([aria-label="Navigation menu"]) .whatsapp-bubble {
+  display: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /*

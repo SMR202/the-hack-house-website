@@ -1,4 +1,5 @@
 import * as React from "react";
+import Image from "next/image";
 
 export function WaveDivider({
   flip = false,
@@ -76,16 +77,14 @@ export function Blob({
 
 export function HouseLogo({ className = "h-9 w-9" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden>
-      <path
-        d="M8 22 L24 8 L40 22 L40 40 Q40 42 38 42 L10 42 Q8 42 8 40 Z"
-        fill="var(--color-primary)"
-      />
-      <path
-        d="M24 18 L26.2 23 L31.5 23.6 L27.5 27.2 L28.7 32.4 L24 29.8 L19.3 32.4 L20.5 27.2 L16.5 23.6 L21.8 23 Z"
-        fill="white"
-      />
-    </svg>
+    <Image
+      src="/images/hack-house-logo.png"
+      alt="The Hack House"
+      width={1024}
+      height={1024}
+      className={`object-contain ${className}`}
+      priority
+    />
   );
 }
 

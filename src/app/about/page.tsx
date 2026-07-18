@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { sanityFetch } from "@/sanity/lib/client";
-import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
-import type { SiteSettings } from "@/types/sanity";
+import { getSiteSettings } from "@/sanity/lib/client";
 import AboutPageClient from "./about-client";
 
 export const metadata: Metadata = {
@@ -18,12 +16,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const settings = await sanityFetch<SiteSettings | null>({ query: SITE_SETTINGS_QUERY });
+  const settings = await getSiteSettings();
   return (
     <AboutPageClient
       team={settings?.team ?? []}
       stats={settings?.stats ?? []}
-      whatsapp={settings?.whatsappNumber}
+      settings={settings}
     />
   );
 }

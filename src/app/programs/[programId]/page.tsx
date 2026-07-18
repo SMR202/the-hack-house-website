@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { sanityFetch } from "@/sanity/lib/client";
+import { getSiteSettings, sanityFetch } from "@/sanity/lib/client";
 import {
   PROGRAM_BY_SLUG_QUERY,
   RELATED_PROGRAMS_QUERY,
@@ -55,8 +55,9 @@ export default async function ProgramDetailPage({ params }: Props) {
 
   const related = await sanityFetch<Program[]>({
     query: RELATED_PROGRAMS_QUERY,
-    params: { slug: programId, category: program.category, ageGroup: program.ageGroup },
+    params: { slug: programId, owner: program.owner },
   });
+  const settings = await getSiteSettings();
 
-  return <ProgramDetailClient program={program} related={related} />;
+  return <ProgramDetailClient program={program} related={related} whatsapp={settings?.whatsappNumber} />;
 }

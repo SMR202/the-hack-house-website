@@ -6,7 +6,7 @@ import RegisterClient from "./register-client";
 
 export const metadata: Metadata = {
   title: "Register — The Hack House",
-  description: "Register or enquire for Hack House programs, daycare, party hall packages, and crash courses.",
+  description: "Register or enquire for a program from The Hack House, Haven Autism, or Haven Montessori.",
   openGraph: {
     title: "Register — The Hack House",
     description: "Register or enquire for a Hack House offering.",

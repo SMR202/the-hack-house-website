@@ -5,15 +5,15 @@ import Link from "next/link";
 import {
   ArrowRight, Sparkles, Search, FileText, MessageCircle, Quote, Play, Star,
 } from "lucide-react";
-import type { Program, Testimonial, CategoryItem, HeroSlide } from "@/types/sanity";
+import type { Program, Testimonial, HeroSlide } from "@/types/sanity";
 import { ProgramCard } from "@/components/program-card";
 import { Squiggle, Blob, WaveDivider } from "@/components/brand";
-import { programSections } from "@/data/sections";
+import { ImageWithFallback } from "@/components/image-with-fallback";
+import { programOwners } from "@/data/program-owners";
 
 interface HomePageClientProps {
   featured: Program[];
   testimonials: Testimonial[];
-  categories: CategoryItem[];
   heroSlides: HeroSlide[];
 }
 
@@ -38,7 +38,7 @@ const fallbackSlides: HeroSlide[] = [
   },
 ];
 
-export default function HomePageClient({ featured, testimonials, categories: _categories, heroSlides }: HomePageClientProps) {
+export default function HomePageClient({ featured, testimonials, heroSlides }: HomePageClientProps) {
   const slides = heroSlides.length > 0 ? heroSlides : fallbackSlides;
 
   return (
@@ -104,7 +104,7 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
             <span className="inline-block animate-bounce-soft">🌟</span>
           </h1>
           <p className="mt-6 max-w-md text-lg text-brand-teal/80">
-            The Hack House brings Haven Autism programs and Haven Montessori together under one caring parent company.
+            The Hack House runs its own programs and brings Haven Autism and Haven Montessori together under one caring parent company.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -154,7 +154,7 @@ function Hero({ slides }: { slides: HeroSlide[] }) {
                 className={`absolute inset-0 overflow-hidden rounded-[28px] bg-white shadow-lift transition-all duration-700 ${styles}`}
               >
                 <div className="relative h-3/5 overflow-hidden">
-                  <img src={s.image} alt={s.title} className="h-full w-full object-cover" />
+                  <ImageWithFallback src={s.image} alt={s.title} className="h-full w-full object-cover" />
                   <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 font-display text-xs font-extrabold text-brand-teal">
                     {s.badge}
                   </span>
@@ -205,7 +205,7 @@ function FeaturedPrograms({ featured }: { featured: Program[] }) {
             Featured Programs <span className="ml-1">🌈</span>
           </h2>
           <Squiggle className="mx-auto mt-1 h-3 w-44" />
-          <p className="mt-4 text-text-soft">Haven Autism programs built around care, structure, and confidence.</p>
+          <p className="mt-4 text-text-soft">Programs from The Hack House and its Haven departments.</p>
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((p) => (
@@ -235,10 +235,10 @@ function SectionsGrid() {
           <h2 className="font-display text-4xl font-black text-brand-teal md:text-5xl">
             Explore The Hack House <span>🎯</span>
           </h2>
-          <p className="mt-3 text-text-soft">Five clear sections for programs, daycare, parties, and crash courses.</p>
+          <p className="mt-3 text-text-soft">Three clear paths for programs, support, and early learning.</p>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {programSections.map((section) => {
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {programOwners.map((section) => {
             return (
               <Link
                 key={section.id}
@@ -251,9 +251,9 @@ function SectionsGrid() {
                 <h3 className="mt-4 font-display text-xl font-extrabold leading-tight text-brand-teal">
                   {section.title}
                 </h3>
-                <p className="mt-2 text-sm text-text-soft">{section.subtitle}</p>
+                <p className="mt-2 text-sm text-text-soft">{section.description}</p>
                 <span className="mt-auto inline-flex items-center gap-1 pt-5 font-display text-sm font-bold text-primary">
-                  View section <ArrowRight className="h-4 w-4" />
+                  View programs <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
             );
@@ -268,7 +268,7 @@ function SectionsGrid() {
 
 function HowItWorks() {
   const steps = [
-    { n: 1, icon: Search, emoji: "🔍", title: "Find a Program", desc: "Browse Haven Autism programs or the Montessori section." },
+    { n: 1, icon: Search, emoji: "🔍", title: "Find a Program", desc: "Browse The Hack House, Haven Autism, or Haven Montessori programs." },
     { n: 2, icon: FileText, emoji: "📝", title: "Fill the Form", desc: "Quick registration takes under 2 minutes." },
     { n: 3, icon: MessageCircle, emoji: "💸", title: "Pay on WhatsApp", desc: "Send your payment screenshot to confirm your spot." },
   ];

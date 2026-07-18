@@ -2,9 +2,10 @@
  * Seed script — imports all hardcoded data from programs.ts into Sanity.
  *
  * Usage:
- *   1. Add your SANITY_API_TOKEN to .env.local
+ *   1. Add your SANITY_EDITOR_TOKEN to .env.local
  *   2. Run: npx tsx scripts/seed.ts
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "next-sanity";
 import * as dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
@@ -13,7 +14,9 @@ const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion: "2026-04-01",
-  token: process.env.SANITY_API_TOKEN!,
+  token: process.env.SANITY_EDITOR_TOKEN
+    ?? process.env.SANITY_API_TOKEN
+    ?? process.env.SANITIY_API_TOKEN,
   useCdn: false,
 });
 
@@ -27,7 +30,7 @@ const programs = [
   { id:"backyard-scientists",title:"Backyard Scientists",category:"science",categoryLabel:"Science",categoryEmoji:"🔬",ageGroup:"ages-6-9",ageLabel:"Ages 7–10",duration:"5 weeks · 75 min",price:"$160",spotsLeft:6,totalSpots:14,dates:"Wed, May 1 — May 29",time:"4:30 PM",location:"Hack House Lab",image:stock("1532094349884-543bc11b234d"),gallery:[stock("1532094349884-543bc11b234d"),stock("1607988795691-3d0147b43231"),stock("1576086213369-97a306d36557"),stock("1530026405186-ed1f139313f8")],shortDescription:"Bubbling potions, bouncing eggs, and the wonder of why things work.",longDescription:"Five weeks of joyful experiments using everyday objects. Kids ask big questions, make predictions, and discover the science hiding in their kitchen, garden, and bathtub.",whatKidsWillDo:["Build a working volcano and a rainbow in a glass","Grow crystals and take them home in a jar","Construct a paper bridge that holds real weight","Keep a real scientist's notebook of discoveries"],instructor:{name:"Dr. Nadia Siddiqui",role:"Curiosity Captain",bio:"Marine biologist turned educator. Has a whole drawer of safety goggles.",photo:stock("1573496359142-b8d87734a5a2")},type:"program",featured:true,order:3 },
   { id:"mini-mvp-soccer",title:"All-Stars Soccer Skills",category:"sports",categoryLabel:"Sports",categoryEmoji:"⚽",ageGroup:"ages-10-13",ageLabel:"Ages 10–13",duration:"8 weeks · 60 min",price:"$200",spotsLeft:9,totalSpots:20,dates:"Sat, Apr 26 — Jun 14",time:"9:00 AM",location:"Riverside Park Field 3",image:stock("1551958219-acbc608c6377"),gallery:[stock("1551958219-acbc608c6377"),stock("1517649763962-0c623066013b"),stock("1486286701208-1d58e9338013"),stock("1526232761682-d26e03ac148e")],shortDescription:"Footwork, teamwork, and good sportsmanship — every Saturday morning.",longDescription:"Eight weeks of skill-building drills, mini-games, and friendly tournaments led by coaches who care more about confidence than scoreboards.",whatKidsWillDo:["Master dribbling, passing, and shooting fundamentals","Play 4v4 mini-matches every session","Learn positions and basic game strategy","Earn a real Hack House All-Stars jersey"],instructor:{name:"Coach Diego Martinez",role:"Head of Sports",bio:"Former semi-pro player. Believes the best coach is the one who cheers loudest.",photo:stock("1500648767791-00dcc994a43e")},type:"program",order:4 },
   { id:"stage-stars",title:"Stage Stars Drama Club",category:"drama",categoryLabel:"Drama",categoryEmoji:"🎭",ageGroup:"ages-10-13",ageLabel:"Ages 9–12",duration:"10 weeks · 2 hr",price:"$280",spotsLeft:1,totalSpots:16,dates:"Fri, Apr 25 — Jun 27",time:"5:00 PM",location:"Hack House Black Box Theatre",image:stock("1503095396549-807759245b35"),gallery:[stock("1503095396549-807759245b35"),stock("1514306191717-452ec28c7814"),stock("1485846234645-a62644f84728"),stock("1571260899304-425eee4c7efc")],shortDescription:"Improv, scripts, and a real end-of-term show in front of a real audience.",longDescription:"A full term of theatre games, scene work, and a final performance. Kids leave bolder, louder, and prouder of their voices.",whatKidsWillDo:["Play improv games that build confidence fast","Memorise and perform a scene from a real play","Help design simple costumes and props","Take the stage for a Friday-night family show"],instructor:{name:"Priya Devereux",role:"Director of Drama",bio:"Theatre director and storyteller. Has never met a shy kid who stayed shy.",photo:stock("1494790108377-be9c29b29330")},type:"program",order:5 },
-  { id:"ukulele-jam",title:"Ukulele Jam Sessions",category:"music",categoryLabel:"Music",categoryEmoji:"🎵",ageGroup:"ages-10-13",ageLabel:"Ages 10–13",duration:"6 weeks · 60 min",price:"$170",spotsLeft:4,totalSpots:12,dates:"Tue, Apr 29 — Jun 3",time:"5:30 PM",location:"Hack House Music Room",image:stock("1510915361894-db8b7855a8a4"),gallery:[stock("1510915361894-db8b7855a8a4"),stock("1471478331149-c72f17e33c73"),stock("1493225457124-a3eb161ffa5f"),stock("1520523839897-bd0b52f945a0")],shortDescription:"Strum your first chord on Tuesday — play a song with friends by Friday.",longDescription:"From a single chord to a full sing-along set in six weeks. Ukuleles provided. No experience needed.",whatKidsWillDo:["Learn 5 essential chords and how to switch between them","Play three full songs solo and in a group","Write the lyrics to an original Hack House anthem","Perform a mini-concert for parents on the final day"],instructor:{name:"Sam Whitlock",role:"Music Maker-in-Chief",bio:"Singer-songwriter and music teacher. Travels with at least three ukuleles.",photo:stock("1463453091185-61582044d556")},type:"program",order:6 },
+  { id:"ukulele-jam",title:"Ukulele Jam Sessions",category:"music",categoryLabel:"Music",categoryEmoji:"🎵",ageGroup:"ages-10-13",ageLabel:"Ages 10–13",duration:"6 weeks · 60 min",price:"$170",spotsLeft:4,totalSpots:12,dates:"Tue, Apr 29 — Jun 3",time:"5:30 PM",location:"Hack House Music Room",image:stock("1493225457124-a3eb161ffa5f"),gallery:[stock("1493225457124-a3eb161ffa5f"),stock("1471478331149-c72f17e33c73"),stock("1520523839897-bd0b52f945a0")],shortDescription:"Strum your first chord on Tuesday — play a song with friends by Friday.",longDescription:"From a single chord to a full sing-along set in six weeks. Ukuleles provided. No experience needed.",whatKidsWillDo:["Learn 5 essential chords and how to switch between them","Play three full songs solo and in a group","Write the lyrics to an original Hack House anthem","Perform a mini-concert for parents on the final day"],instructor:{name:"Sam Whitlock",role:"Music Maker-in-Chief",bio:"Singer-songwriter and music teacher. Travels with at least three ukuleles.",photo:stock("1463453091185-61582044d556")},type:"program",order:6 },
   { id:"teen-makers-clay",title:"Pottery Studio for Teens",category:"arts",categoryLabel:"Arts & Crafts",categoryEmoji:"🎨",ageGroup:"ages-14-plus",ageLabel:"Ages 14+",duration:"8 weeks · 2 hr",price:"$320",spotsLeft:5,totalSpots:10,dates:"Thu, May 1 — Jun 19",time:"6:00 PM",location:"Hack House Ceramics Studio",image:stock("1565193566173-7a0ee3dbe261"),gallery:[stock("1565193566173-7a0ee3dbe261"),stock("1493106641515-6b5631de4bb9"),stock("1605714196241-00bf7a8fa7a0"),stock("1504208434309-cb69f4fe52b0")],shortDescription:"Throw, trim, glaze, and fire — eight weeks at a real potter's wheel.",longDescription:"A serious teen studio experience. Eight weeks of guided practice on the wheel and hand-building, ending with a glazed collection of pieces fired in our kiln.",whatKidsWillDo:["Learn to centre clay and throw mugs and bowls","Hand-build a sculptural piece of their own design","Glaze and fire their work in a real kiln","Curate a mini exhibition of their best pieces"],instructor:{name:"Renata Voss",role:"Master Potter",bio:"Studio ceramicist with 15 years on the wheel. Patient. Endlessly patient.",photo:stock("1487412720507-e7ab37603c6f")},type:"program",order:7 },
   { id:"teen-songwriting",title:"Songwriting Lab",category:"music",categoryLabel:"Music",categoryEmoji:"🎵",ageGroup:"ages-14-plus",ageLabel:"Ages 14+",duration:"6 weeks · 90 min",price:"$240",spotsLeft:7,totalSpots:12,dates:"Mon, Apr 28 — Jun 2",time:"6:30 PM",location:"Hack House Music Room",image:stock("1511671782779-c97d3d27a1d4"),gallery:[stock("1511671782779-c97d3d27a1d4"),stock("1485579149621-3123dd979885"),stock("1493676304819-0d7a8d026dcf")],shortDescription:"Write, record, and release your first original track.",longDescription:"A six-week songwriting intensive. Teens learn melody, lyric, and structure, then record their finished song in our studio.",whatKidsWillDo:["Develop a song from a single lyric idea to a finished demo","Learn basic melody, harmony, and song structure","Record vocals and instruments in our studio","Release a private Hack House EP with all the class tracks"],instructor:{name:"Sam Whitlock",role:"Music Maker-in-Chief",bio:"Singer-songwriter and music teacher. Travels with at least three ukuleles.",photo:stock("1463453091185-61582044d556")},type:"program",order:8 },
   { id:"teen-improv",title:"Improv & Stand-Up",category:"drama",categoryLabel:"Drama",categoryEmoji:"🎭",ageGroup:"ages-14-plus",ageLabel:"Ages 14+",duration:"6 weeks · 90 min",price:"$210",spotsLeft:8,totalSpots:14,dates:"Wed, Apr 30 — Jun 4",time:"7:00 PM",location:"Hack House Black Box Theatre",image:stock("1527224538127-2104bb71c51b"),gallery:[stock("1527224538127-2104bb71c51b"),stock("1503095396549-807759245b35"),stock("1485846234645-a62644f84728")],shortDescription:"Find your funny — six weeks of improv games and stand-up coaching.",longDescription:"A safe, hilarious space for teens to find their voice on stage. Ends with a low-key open-mic night for friends and family.",whatKidsWillDo:["Learn the rules of long-form improv","Write and refine a 3-minute stand-up set","Perform at our end-of-term open mic","Build the kind of confidence that lasts long after class"],instructor:{name:"Priya Devereux",role:"Director of Drama",bio:"Theatre director and storyteller. Has never met a shy kid who stayed shy.",photo:stock("1494790108377-be9c29b29330")},type:"program",order:9 },
@@ -86,20 +89,11 @@ const siteSettings = {
     { _key:"t5",name:"Priya Devereux",role:"Director of Drama",bio:"Theatre director and storyteller. Has never met a shy kid who stayed shy.",photo:stock("1494790108377-be9c29b29330") },
     { _key:"t6",name:"Sam Whitlock",role:"Music Maker-in-Chief",bio:"Singer-songwriter. Travels with at least three ukuleles.",photo:stock("1463453091185-61582044d556") },
   ],
-  categories: [
-    { _key:"c1",id:"arts",label:"Arts & Crafts",emoji:"🎨" },
-    { _key:"c2",id:"cooking",label:"Cooking",emoji:"🍳" },
-    { _key:"c3",id:"science",label:"Science",emoji:"🔬" },
-    { _key:"c4",id:"sports",label:"Sports",emoji:"⚽" },
-    { _key:"c5",id:"drama",label:"Drama",emoji:"🎭" },
-    { _key:"c6",id:"music",label:"Music",emoji:"🎵" },
-  ],
   heroSlides: [
     { _key:"h1",image:stock("1503454537195-1dcabb73ffb9","&w=900"),title:"Watercolor Wonders",subtitle:"Saturdays · Ages 6–9",badge:"🎨 Arts" },
     { _key:"h2",image:stock("1556909114-f6e7ad7d3136","&w=900"),title:"Tiny Chefs Kitchen",subtitle:"Sundays · Ages 6–9",badge:"🍳 Cooking" },
     { _key:"h3",image:stock("1503095396549-807759245b35","&w=900"),title:"Stage Stars Drama",subtitle:"Fridays · Ages 9–12",badge:"🎭 Drama" },
   ],
-  whatsappNumber: "15555555555",
 };
 
 async function seed() {
@@ -107,24 +101,37 @@ async function seed() {
   const tx = client.transaction();
 
   // Programs
-  const allPrograms: any[] = [...programs, ...sectionPrograms];
+  const allPrograms: any[] = [...programs, ...sectionPrograms].filter(
+    (program) => {
+      if (!(program as any).section || (program as any).section === "haven-montessori") return true;
+      return (program as any).section === "crash-courses-children" && [
+        "toddler-tot-program",
+        "little-leaders-growth",
+        "teen-led-program",
+      ].includes(program.id);
+    },
+  );
   for (const p of allPrograms) {
-    const { id, featured, order, ...rest } = p;
+    const {
+      id, featured, order, section, type, campType, subsectionLabel, participantKind,
+      category, categoryLabel, categoryEmoji, ageGroup, whatKidsWillDo, ...rest
+    } = p;
+    const owner = id === "haven-therapy-services"
+      ? "haven-autism"
+      : type === "montessori" || section === "haven-montessori"
+        ? "haven-montessori"
+        : "hack-house";
     tx.createOrReplace({
       _id: `program-${id}`,
       _type: "program",
       slug: { _type: "slug", current: id },
       featured: featured ?? false,
       order: order ?? 99,
+      owner,
+      highlights: p.highlights?.length ? p.highlights : whatKidsWillDo,
       ...rest,
     } as any);
     console.log(`  ✅ program: ${p.title}`);
-  }
-
-  // Age groups
-  for (const ag of ageGroups) {
-    tx.createOrReplace({ _id: `ageGroup-${ag.key}`, _type: "ageGroup", ...ag });
-    console.log(`  ✅ ageGroup: ${ag.name}`);
   }
 
   // Testimonials
@@ -133,8 +140,11 @@ async function seed() {
     console.log(`  ✅ testimonial: ${testimonials[i].parent}`);
   }
 
-  // Site settings
-  tx.createOrReplace(siteSettings);
+  // Preserve contact details managed by the client in Studio.
+  const existingContactDetails = await client.fetch(
+    `*[_id == "siteSettings"][0]{whatsappNumber,email,address,mapUrl,instagramUrl,facebookUrl}`,
+  );
+  tx.createOrReplace({ ...siteSettings, ...existingContactDetails });
   console.log("  ✅ siteSettings");
 
   console.log("\n📡 Committing transaction...");

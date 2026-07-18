@@ -2,14 +2,12 @@ import Link from "next/link";
 import { Instagram, Facebook, MessageCircle } from "lucide-react";
 import { HouseLogo } from "./brand";
 
-import { sanityFetch } from "@/sanity/lib/client";
-import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 import type { SiteSettings } from "@/types/sanity";
 
-export async function Footer() {
-  const settings = await sanityFetch<SiteSettings | null>({ query: SITE_SETTINGS_QUERY });
-  const displayWhatsapp = settings?.whatsappNumber || "+92 316 5322764";
-  const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
+export function Footer({ settings }: { settings: SiteSettings | null }) {
+  const displayWhatsapp = settings?.whatsappNumber;
+  const waLink = displayWhatsapp ? `https://wa.me/${displayWhatsapp.replace(/\D/g, "")}` : null;
+  const contactDetails = [settings?.address, settings?.email, displayWhatsapp].filter(Boolean).join(" · ");
 
   return (
     <footer className="relative mt-20 overflow-hidden bg-[oklch(0.96_0.02_195)] text-brand-teal">
@@ -17,45 +15,45 @@ export async function Footer() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5">
-              <HouseLogo className="h-10 w-10" />
-              <span className="font-display text-2xl font-extrabold">Hack House</span>
+            <div className="flex items-center">
+              <HouseLogo className="h-24 w-24" />
             </div>
             <p className="mt-4 max-w-sm text-sm text-brand-teal/75">
               Parent company for Haven Autism and Haven Montessori, with child-centered programs for growing families.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-105"
-              >
-                <MessageCircle className="h-4 w-4" /> WhatsApp us
-              </a>
-              <SocialIcon href="#" label="Instagram"><Instagram className="h-4 w-4" /></SocialIcon>
-              <SocialIcon href="#" label="Facebook"><Facebook className="h-4 w-4" /></SocialIcon>
+              {waLink && (
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-bold text-white transition-transform hover:scale-105"
+                >
+                  <MessageCircle className="h-4 w-4" /> WhatsApp us
+                </a>
+              )}
+              {settings?.instagramUrl && <SocialIcon href={settings.instagramUrl} label="Instagram"><Instagram className="h-4 w-4" /></SocialIcon>}
+              {settings?.facebookUrl && <SocialIcon href={settings.facebookUrl} label="Facebook"><Facebook className="h-4 w-4" /></SocialIcon>}
             </div>
           </div>
           <FooterCol title="Quick Links">
             <FLink href="/">Home</FLink>
-            <FLink href="/about">About Us</FLink>
+            <FLink href="/about">About</FLink>
             <FLink href="/register">Register</FLink>
           </FooterCol>
           <FooterCol title="Programs">
-            <FLink href="/programs">All programs</FLink>
-            <FLink href="/programs/age/ages-6-9">Little Explorers</FLink>
-            <FLink href="/programs/age/ages-10-13">Junior Creators</FLink>
-            <FLink href="/programs/age/ages-14-plus">Teen Makers</FLink>
+            <FLink href="/programs">The Hack House</FLink>
+            <FLink href="/haven-autism">Haven Autism</FLink>
+            <FLink href="/haven-montessori">Haven Montessori</FLink>
           </FooterCol>
-          <FooterCol title="Montessori">
-            <FLink href="/montessori">Haven Montessori</FLink>
+          <FooterCol title="The Hack House">
+            <FLink href="/about">About us</FLink>
             <FLink href="/about">Our team</FLink>
           </FooterCol>
         </div>
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-brand-teal/10 pt-6 text-xs text-brand-teal/60 md:flex-row md:items-center">
           <div>© {new Date().getFullYear()} The Hack House. Made with care for curious kids.</div>
-          <div>123 Maple Lane · Hello@hackhouse.kids · +1 (555) 555-5555</div>
+          {contactDetails && <div>{contactDetails}</div>}
         </div>
       </div>
     </footer>
@@ -66,6 +64,8 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
   return (
     <a
       href={href}
+      target="_blank"
+      rel="noreferrer"
       aria-label={label}
       className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-teal/10 text-brand-teal transition-colors hover:bg-brand-teal/20"
     >

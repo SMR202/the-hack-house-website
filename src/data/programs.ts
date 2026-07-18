@@ -1,4 +1,10 @@
-import type { ParticipantKind, ProgramSectionId } from "@/types/sanity";
+type ProgramSectionId =
+  | "haven-autism"
+  | "haven-montessori"
+  | "party-hall"
+  | "crash-courses-adults"
+  | "crash-courses-children";
+type ParticipantKind = "child" | "adult" | "event" | "family";
 
 export type AgeGroupId = "ages-6-9" | "ages-10-13" | "ages-14-plus";
 export type CategoryId =
@@ -267,9 +273,9 @@ export const programs: Program[] = [
     dates: "Tue, Apr 29 — Jun 3",
     time: "5:30 PM",
     location: "Hack House Music Room",
-    image: stock("1510915361894-db8b7855a8a4"),
+    image: stock("1493225457124-a3eb161ffa5f"),
     gallery: [
-      stock("1510915361894-db8b7855a8a4"),
+      stock("1493225457124-a3eb161ffa5f"),
       stock("1471478331149-c72f17e33c73"),
       stock("1493225457124-a3eb161ffa5f"),
       stock("1520523839897-bd0b52f945a0"),

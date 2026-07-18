@@ -2,12 +2,11 @@
 
 import * as React from "react";
 import { MessageCircle, MapPin, Mail, Phone } from "lucide-react";
-import type { TeamMember, StatItem } from "@/types/sanity";
+import type { TeamMember, StatItem, SiteSettings } from "@/types/sanity";
 import { Blob, Squiggle, useCountUp, WaveDivider } from "@/components/brand";
 
-export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamMember[]; stats: StatItem[]; whatsapp?: string }) {
-  const displayWhatsapp = whatsapp || "+92 316 5322764";
-  const waLink = `https://wa.me/${displayWhatsapp.replace(/[^0-9+]/g, "")}`;
+export default function AboutPageClient({ team, stats, settings }: { team: TeamMember[]; stats: StatItem[]; settings: SiteSettings | null }) {
+  const waLink = settings?.whatsappNumber ? `https://wa.me/${settings.whatsappNumber.replace(/\D/g, "")}` : undefined;
   return (
     <>
       <section className="relative h-[420px] overflow-hidden md:h-[500px]">
@@ -69,7 +68,7 @@ export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamM
             Every child has a spark. We just give them the space to shine.
           </blockquote>
           <div className="mt-4 font-display text-sm font-extrabold uppercase tracking-wider text-brand-teal">
-            — Maya Okafor, Founder
+            — The Hack House team
           </div>
         </div>
       </section>
@@ -110,31 +109,26 @@ export default function AboutPageClient({ team, stats, whatsapp }: { team: TeamM
 
       {/* Contact + Map */}
       <section className="bg-background py-20">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 md:px-8 lg:grid-cols-2">
-          <div className="overflow-hidden rounded-3xl shadow-soft">
-            <iframe
-              title="Hack House location"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=-0.13%2C51.50%2C-0.10%2C51.52&amp;layer=mapnik"
-              className="h-[380px] w-full border-0"
-              loading="lazy"
-            />
-          </div>
+        <div className={`mx-auto grid max-w-7xl gap-10 px-6 md:px-8 ${settings?.mapUrl ? "lg:grid-cols-2" : "max-w-3xl"}`}>
+          {settings?.mapUrl && <div className="overflow-hidden rounded-3xl shadow-soft"><iframe title="The Hack House location" src={settings.mapUrl} className="h-[380px] w-full border-0" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-popups" /></div>}
           <div>
             <h2 className="font-display text-3xl font-black text-brand-teal md:text-4xl">Come say hi</h2>
             <p className="mt-3 text-text-soft">
               Drop in for a tour, or chat to us on WhatsApp — we love hearing from new families.
             </p>
             <ul className="mt-6 space-y-3">
-              <ContactRow icon={<MapPin className="h-4 w-4" />} label="Visit" value="123 Maple Lane, Hackville · Open Mon–Sat" />
-              <ContactRow icon={<Mail className="h-4 w-4" />} label="Email" value="hello@hackhouse.kids" />
-              <ContactRow icon={<Phone className="h-4 w-4" />} label="Phone" value={displayWhatsapp} />
+              {settings?.address && <ContactRow icon={<MapPin className="h-4 w-4" />} label="Visit" value={settings.address} />}
+              {settings?.email && <ContactRow icon={<Mail className="h-4 w-4" />} label="Email" value={settings.email} />}
+              {settings?.whatsappNumber && <ContactRow icon={<Phone className="h-4 w-4" />} label="Phone" value={settings.whatsappNumber} />}
             </ul>
-            <a
+            {waLink && <a
               href={waLink}
+              target="_blank"
+              rel="noreferrer"
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-6 py-3 font-display text-sm font-extrabold text-white shadow-soft transition-transform hover:scale-105"
             >
               <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
-            </a>
+            </a>}
           </div>
         </div>
       </section>

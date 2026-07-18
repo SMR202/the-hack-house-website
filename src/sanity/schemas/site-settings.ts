@@ -50,21 +50,6 @@ export const siteSettings = defineType({
       ],
     }),
     defineField({
-      name: "categories",
-      title: "Program Categories",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({ name: "id", title: "ID", type: "string", validation: (r) => r.required() }),
-            defineField({ name: "label", title: "Label", type: "string", validation: (r) => r.required() }),
-            defineField({ name: "emoji", title: "Emoji", type: "string", validation: (r) => r.required() }),
-          ],
-        },
-      ],
-    }),
-    defineField({
       name: "heroSlides",
       title: "Hero Slideshow",
       type: "array",
@@ -84,8 +69,13 @@ export const siteSettings = defineType({
       name: "whatsappNumber",
       title: "WhatsApp Number",
       type: "string",
-      description: 'e.g. "15555555555"',
+      description: 'Include country code, e.g. "+92 300 1234567".',
     }),
+    defineField({ name: "email", title: "Email", type: "string" }),
+    defineField({ name: "address", title: "Address", type: "string" }),
+    defineField({ name: "mapUrl", title: "Map Embed URL", type: "url" }),
+    defineField({ name: "instagramUrl", title: "Instagram URL", type: "url" }),
+    defineField({ name: "facebookUrl", title: "Facebook URL", type: "url" }),
   ],
   preview: {
     select: { title: "title" },

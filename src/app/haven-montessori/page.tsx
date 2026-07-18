@@ -5,14 +5,14 @@ import { PROGRAMS_BY_OWNER_QUERY } from "@/sanity/lib/queries";
 import type { Program } from "@/types/sanity";
 
 export const metadata: Metadata = {
-  title: "Programs · The Hack House",
-  description: "Creative, practical, and confidence-building programs from The Hack House.",
+  title: "Haven Montessori · The Hack House",
+  description: "Prepared environments that support independence, focus, and early learning.",
 };
 
-export default async function ProgramsPage() {
+export default async function HavenMontessoriPage() {
   const programs = await sanityFetch<Program[]>({
     query: PROGRAMS_BY_OWNER_QUERY,
-    params: { owner: "hack-house" },
+    params: { owner: "haven-montessori" },
   });
-  return <OwnerProgramsPage ownerId="hack-house" programs={programs} />;
+  return <OwnerProgramsPage ownerId="haven-montessori" programs={programs} />;
 }

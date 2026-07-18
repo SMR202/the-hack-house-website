@@ -3,29 +3,32 @@
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Check, Calendar, MessageCircle, ArrowRight, User } from "lucide-react";
+import { Check, MessageCircle, ArrowRight } from "lucide-react";
 import type { Program } from "@/types/sanity";
 import { ProgramCard } from "@/components/program-card";
 
+const seeded = (value: number) => {
+  const result = Math.sin(value * 999) * 43758.5453;
+  return result - Math.floor(result);
+};
+
 const confettiBits = Array.from({ length: 32 }).map((_, i) => ({
   id: i,
-  left: Math.random() * 100,
-  cx: (Math.random() - 0.5) * 600,
-  cy: 200 + Math.random() * 400,
-  cr: (Math.random() - 0.5) * 720,
+  left: seeded(i + 1) * 100,
+  cx: (seeded(i + 33) - 0.5) * 600,
+  cy: 200 + seeded(i + 65) * 400,
+  cr: (seeded(i + 97) - 0.5) * 720,
   color: ["#29B8B0", "#E8873A", "#FFD166", "#FF8FAB", "#FFFFFF"][i % 5],
-  delay: Math.random() * 0.4,
-  size: 6 + Math.random() * 8,
+  delay: seeded(i + 129) * 0.4,
+  size: 6 + seeded(i + 161) * 8,
 }));
 
-export default function SuccessPageClient({ programs }: { programs: Program[] }) {
+export default function SuccessPageClient({ programs, whatsapp }: { programs: Program[]; whatsapp?: string }) {
   const searchParams = useSearchParams();
-  const child = searchParams.get("child") ?? undefined;
-  const program = searchParams.get("program") ?? undefined;
-  const dates = searchParams.get("dates") ?? undefined;
-  const whatsapp = searchParams.get("whatsapp") ?? undefined;
+  const reference = searchParams.get("ref") ?? undefined;
+  const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.replace(/\D/g, "")}` : null;
 
-  const suggested = programs.filter((p) => p.title !== program).slice(0, 3);
+  const suggested = programs.slice(0, 3);
 
   return (
     <section className="relative overflow-hidden bg-background py-16 md:py-20">
@@ -69,7 +72,7 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
           You&apos;re All Set! 🎉
         </h1>
         <p className="mt-3 text-lg text-text-soft">
-          We&apos;ve received {child ? `the request for ${child}` : "your request"}.
+          We&apos;ve received your request.
         </p>
 
         {/* Summary card */}
@@ -78,18 +81,8 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
             Your request
           </div>
           <div className="mt-3 grid gap-3">
-            {child && (
-              <Row icon={<User className="h-4 w-4" />} label="Name" value={child} />
-            )}
-            {program && (
-              <Row icon={<Check className="h-4 w-4" />} label="Offering" value={program} />
-            )}
-            {dates && (
-              <Row icon={<Calendar className="h-4 w-4" />} label="Dates" value={dates} />
-            )}
-            {whatsapp && (
-              <Row icon={<MessageCircle className="h-4 w-4" />} label="WhatsApp" value={whatsapp} />
-            )}
+            <Row icon={<Check className="h-4 w-4" />} label="Status" value="Request received" />
+            {reference && <Row icon={<Check className="h-4 w-4" />} label="Reference" value={reference} />}
           </div>
         </div>
 
@@ -103,12 +96,16 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
             <Step n={2}>We&apos;ll confirm availability and pricing on WhatsApp</Step>
             <Step n={3}>Send any requested payment confirmation there to lock your booking</Step>
           </ol>
-          <a
-            href="https://wa.me/15555555555"
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-display text-base font-extrabold text-white shadow-soft transition-transform hover:scale-[1.02]"
-          >
-            <MessageCircle className="h-5 w-5" /> Open WhatsApp <ArrowRight className="h-4 w-4" />
-          </a>
+          {whatsappHref && (
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-display text-base font-extrabold text-white shadow-soft transition-transform hover:scale-[1.02]"
+            >
+              <MessageCircle className="h-5 w-5" /> Open WhatsApp <ArrowRight className="h-4 w-4" />
+            </a>
+          )}
         </div>
 
         <Link href="/" className="mt-8 inline-block font-display text-sm font-bold text-primary hover:underline">
@@ -116,7 +113,7 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
         </Link>
       </div>
 
-      <div className="mx-auto mt-16 max-w-7xl px-6 md:px-8">
+      {suggested.length > 0 && <div className="mx-auto mt-16 max-w-7xl px-6 md:px-8">
         <h2 className="font-display text-2xl font-extrabold text-brand-teal text-center">
           While you wait, check out more offerings
         </h2>
@@ -125,7 +122,7 @@ export default function SuccessPageClient({ programs }: { programs: Program[] })
             <ProgramCard key={p.id} program={p} />
           ))}
         </div>
-      </div>
+      </div>}
     </section>
   );
 }
